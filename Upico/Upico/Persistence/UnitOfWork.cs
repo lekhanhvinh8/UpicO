@@ -11,14 +11,24 @@ namespace Upico.Persistence
     public class UnitOfWork : IUnitOfWork
     {
         private readonly UpicODbContext _context;
-        public UnitOfWork(UpicODbContext context)
+
+        public UnitOfWork(UpicODbContext context, 
+            IAvatarRepository avatarRepository,
+            IUserRepository userRepository)
         {
+            //a data context that be injected in runtime is the same for both UnitOfWork and CustomRepository
+
+            //So when we modify data in CustomRepository and save it in UnitOfWork.Complete, 2 contexts that are working
+            //in order to modify and save data is the same context
+
             this._context = context;
 
-            Avatars = new AvatarRepository(_context);
+            Avatars = avatarRepository;
+            Users = userRepository;
         }
 
         public IAvatarRepository Avatars { get; private set; }
+        public IUserRepository Users { get; private set; }
 
         public async Task<int> Complete()
         {

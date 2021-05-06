@@ -9,7 +9,7 @@ namespace Upico.Core
     public interface IUnitOfWork : IDisposable
     {
         IAvatarRepository Avatars { get; }
-
+        IUserRepository Users { get; }
         Task<int> Complete();
     }
 }

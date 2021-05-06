@@ -6,8 +6,8 @@ using Upico.Core.Domain;
 
 namespace Upico.Core.Repositories
 {
-    public interface IAvatarRepository : IRepository<Avatar>
+    public interface IUserRepository
     {
-        public Task<List<Avatar>> GetAvatar(string userName);
+        public Task<AppUser> GetUser(string userName);
     }
 }

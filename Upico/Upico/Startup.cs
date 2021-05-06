@@ -40,11 +40,18 @@ namespace Upico
 
             services.AddAuthentication();
 
-            //injecting interface
+            //Injecting interface
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+            // the context that pass to AvatarRepository and UnitOfWork in runtime is the same class.
+            services.AddScoped<IAvatarRepository, AvatarRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
-            //default
+            //For auto mapper
+            services.AddAutoMapper(typeof(Startup));
+
+
+            //Default
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

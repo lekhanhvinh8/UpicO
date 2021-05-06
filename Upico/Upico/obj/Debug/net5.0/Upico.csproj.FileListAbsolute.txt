@@ -64,3 +64,5 @@ C:\MyData\OnGoingProjects\UpicO\Upico\Upico\obj\Debug\net5.0\Upico.dll
 C:\MyData\OnGoingProjects\UpicO\Upico\Upico\obj\Debug\net5.0\ref\Upico.dll
 C:\MyData\OnGoingProjects\UpicO\Upico\Upico\obj\Debug\net5.0\Upico.pdb
 C:\MyData\OnGoingProjects\UpicO\Upico\Upico\obj\Debug\net5.0\Upico.genruntimeconfig.cache
+C:\MyData\OnGoingProjects\UpicO\Upico\Upico\bin\Debug\net5.0\AutoMapper.dll
+C:\MyData\OnGoingProjects\UpicO\Upico\Upico\bin\Debug\net5.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll

@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,26 +9,18 @@ namespace Upico.Persistence.Repositories
 {
     public class AvatarRepository : Repository<Avatar>, IAvatarRepository
     {
+        private readonly UpicODbContext _context;
 
         public AvatarRepository(UpicODbContext context)
             :base(context)
         {
+            this._context = context;
         }
-        public async Task<Avatar> DoSomething()
+        public async Task<List<Avatar>> GetAvatar(string userName)
         {
-            // Add new avatar to user vinh 07
+            var avatars = await this._context.Avatars.Where(a => a.AppUser.UserName == userName).ToListAsync();
 
-            var user = this.Context.Set<AppUser>().SingleOrDefault(u => u.UserName == "vinh");
-
-            var avatar = new Avatar();
-            avatar.Path = "vinhAvatar.png";
-
-            user.Avatars.Add(avatar);
-
-            await this.Context.SaveChangesAsync();
-
-            return avatar;
-
+            return avatars;
         }
     }
 }

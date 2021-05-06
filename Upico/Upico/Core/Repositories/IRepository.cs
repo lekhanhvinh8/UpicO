@@ -8,14 +8,14 @@ namespace Upico.Core.Repositories
 {
     public interface IRepository<TEntity> where TEntity : class
     {
-        TEntity Get(int id);
-        TEntity SingleOrDefault(Expression<Func<TEntity, bool>> predicate);
-        IEnumerable<TEntity> GetAll();
+        Task<TEntity> Get(int id);
+        Task<TEntity> SingleOrDefault(Expression<Func<TEntity, bool>> predicate);
+        Task<IEnumerable<TEntity>> GetAll();
         IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate);
-        void Add(TEntity entity);
-        void AddRange(IEnumerable<TEntity> entities);
+        Task Add(TEntity entity);
+        Task AddRange(IEnumerable<TEntity> entities);
         void Remove(TEntity entity);
         void RemoveRange(IEnumerable<TEntity> entities);
-        void Load(Expression<Func<TEntity, bool>> predicate);
+        Task Load(Expression<Func<TEntity, bool>> predicate);
     }
 }

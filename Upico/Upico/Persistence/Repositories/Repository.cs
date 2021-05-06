@@ -17,14 +17,14 @@ namespace Upico.Persistence.Repositories
             this.Context = context;
             this._entities = context.Set<TEntity>();
         }
-        public void Add(TEntity entity)
+        public async Task Add(TEntity entity)
         {
-            this._entities.Add(entity);
+            await this._entities.AddAsync(entity);
         }
 
-        public void AddRange(IEnumerable<TEntity> entities)
+        public async Task AddRange(IEnumerable<TEntity> entities)
         {
-            this._entities.AddRange(entities);
+            await this._entities.AddRangeAsync(entities);
         }
 
         public IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate)
@@ -32,18 +32,18 @@ namespace Upico.Persistence.Repositories
             return this._entities.Where(predicate);
         }
 
-        public TEntity Get(int id)
+        public async Task<TEntity> Get(int id)
         {
-            return this._entities.Find(id);
+            return await this._entities.FindAsync(id);
         }
 
-        public IEnumerable<TEntity> GetAll()
+        public async Task<IEnumerable<TEntity>> GetAll()
         {
-            return this._entities.ToList();
+            return await this._entities.ToListAsync();
         }
-        public void Load(Expression<Func<TEntity, bool>> predicate)
+        public async Task Load(Expression<Func<TEntity, bool>> predicate)
         {
-            this._entities.Where(predicate).Load();
+            await this._entities.Where(predicate).LoadAsync();
         }
         public void Remove(TEntity entity)
         {
@@ -55,9 +55,9 @@ namespace Upico.Persistence.Repositories
             this._entities.RemoveRange(entities);
         }
 
-        public TEntity SingleOrDefault(Expression<Func<TEntity, bool>> predicate)
+        public async Task<TEntity> SingleOrDefault(Expression<Func<TEntity, bool>> predicate)
         {
-            return this._entities.SingleOrDefault(predicate);
+            return await this._entities.SingleOrDefaultAsync(predicate);
         }
     }
 }
