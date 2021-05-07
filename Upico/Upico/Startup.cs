@@ -46,6 +46,10 @@ namespace Upico
             // the context that pass to AvatarRepository and UnitOfWork in runtime is the same class.
             services.AddScoped<IAvatarRepository, AvatarRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IPostRepository, PostRepository>();
+            services.AddScoped<IPostedImageRepository, PostedImageRepository>();
+            services.AddScoped<ILikeRepository, LikeRepository>();
+            services.AddScoped<ICommentRepository, CommentRepository>();
 
             //For auto mapper
             services.AddAutoMapper(typeof(Startup));

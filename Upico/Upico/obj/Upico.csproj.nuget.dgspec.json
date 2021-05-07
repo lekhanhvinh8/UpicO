@@ -1,20 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "D:\\luubai\\UpicO\\Upico\\Upico\\Upico.csproj": {}
+    "C:\\MyData\\OnGoingProjects\\UpicO\\Upico\\Upico\\Upico.csproj": {}
   },
   "projects": {
-    "D:\\luubai\\UpicO\\Upico\\Upico\\Upico.csproj": {
+    "C:\\MyData\\OnGoingProjects\\UpicO\\Upico\\Upico\\Upico.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\luubai\\UpicO\\Upico\\Upico\\Upico.csproj",
+        "projectUniqueName": "C:\\MyData\\OnGoingProjects\\UpicO\\Upico\\Upico\\Upico.csproj",
         "projectName": "Upico",
-        "projectPath": "D:\\luubai\\UpicO\\Upico\\Upico\\Upico.csproj",
-        "packagesPath": "C:\\Users\\Tam\\.nuget\\packages\\",
-        "outputPath": "D:\\luubai\\UpicO\\Upico\\Upico\\obj\\",
+        "projectPath": "C:\\MyData\\OnGoingProjects\\UpicO\\Upico\\Upico\\Upico.csproj",
+        "packagesPath": "C:\\Users\\lekha\\.nuget\\packages\\",
+        "outputPath": "C:\\MyData\\OnGoingProjects\\UpicO\\Upico\\Upico\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Tam\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\lekha\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -85,7 +90,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.102\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.202\\RuntimeIdentifierGraph.json"
         }
       }
     }

@@ -10,6 +10,10 @@ namespace Upico.Core
     {
         IAvatarRepository Avatars { get; }
         IUserRepository Users { get; }
+        IPostRepository Posts { get; }
+        IPostedImageRepository PostedImages { get; }
+        ILikeRepository Likes { get; }
+        ICommentRepository Comments { get; }
         Task<int> Complete();
     }
 }

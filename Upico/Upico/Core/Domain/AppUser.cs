@@ -9,8 +9,8 @@ namespace Upico.Core.Domain
         public string FirstName { set; get; }
         public string LastName { set; get; }
         public string FullName { set; get; }
-        public string? DisplayName { get; set; }
-        public string? Bio { get; set; }
+        public string DisplayName { get; set; }
+        public string Bio { get; set; }
         public IList<Post> Posts { set; get; }
         public IList<Avatar> Avatars { get; set; }
         public IList<Comment> Comments { get; set; }

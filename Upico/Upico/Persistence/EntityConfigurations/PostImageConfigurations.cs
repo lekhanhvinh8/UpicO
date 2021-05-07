@@ -8,9 +8,9 @@ using Upico.Core.Domain;
 
 namespace Upico.Persistence.EntityConfigurations
 {
-    public class PostImageConfigurations : IEntityTypeConfiguration<PostImage>
+    public class PostImageConfigurations : IEntityTypeConfiguration<PostedImage>
     {
-        public void Configure(EntityTypeBuilder<PostImage> builder)
+        public void Configure(EntityTypeBuilder<PostedImage> builder)
         {
             builder.HasKey(a => a.Id);
 

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Upico.Core.Domain
 {
-    public class PostImage
+    public class PostedImage
     {
         public Guid Id { set; get; }
         public Guid PostId { set; get; }
