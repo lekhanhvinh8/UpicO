@@ -13,6 +13,7 @@ using Upico.Persistence;
 namespace Upico.Controllers
 {
     [Route("/api/avatars")]
+    [ApiController]
     public class AvatarsController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

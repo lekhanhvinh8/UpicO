@@ -10,7 +10,7 @@ using Upico.Persistence;
 namespace Upico.Migrations
 {
     [DbContext(typeof(UpicODbContext))]
-    [Migration("20210507121530_create-database")]
+    [Migration("20210513065038_create-database")]
     partial class createdatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -323,7 +323,7 @@ namespace Upico.Migrations
                     b.ToTable("Posts");
                 });
 
-            modelBuilder.Entity("Upico.Core.Domain.PostImage", b =>
+            modelBuilder.Entity("Upico.Core.Domain.PostedImage", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -451,7 +451,7 @@ namespace Upico.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Upico.Core.Domain.PostImage", b =>
+            modelBuilder.Entity("Upico.Core.Domain.PostedImage", b =>
                 {
                     b.HasOne("Upico.Core.Domain.Post", "Post")
                         .WithMany("PostImages")

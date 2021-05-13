@@ -97,7 +97,6 @@ D:\luubai\UpicO\Upico\Upico\bin\Debug\net5.0\Microsoft.IdentityModel.Protocols.d
 D:\luubai\UpicO\Upico\Upico\bin\Debug\net5.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 D:\luubai\UpicO\Upico\Upico\bin\Debug\net5.0\Microsoft.IdentityModel.Tokens.dll
 D:\luubai\UpicO\Upico\Upico\bin\Debug\net5.0\Microsoft.OpenApi.dll
-D:\luubai\UpicO\Upico\Upico\bin\Debug\net5.0\Newtonsoft.Json.dll
 D:\luubai\UpicO\Upico\Upico\bin\Debug\net5.0\Swashbuckle.AspNetCore.Swagger.dll
 D:\luubai\UpicO\Upico\Upico\bin\Debug\net5.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 D:\luubai\UpicO\Upico\Upico\bin\Debug\net5.0\Swashbuckle.AspNetCore.SwaggerUI.dll
@@ -134,3 +133,4 @@ D:\luubai\UpicO\Upico\Upico\obj\Debug\net5.0\Upico.dll
 D:\luubai\UpicO\Upico\Upico\obj\Debug\net5.0\ref\Upico.dll
 D:\luubai\UpicO\Upico\Upico\obj\Debug\net5.0\Upico.pdb
 D:\luubai\UpicO\Upico\Upico\obj\Debug\net5.0\Upico.genruntimeconfig.cache
+D:\luubai\UpicO\Upico\Upico\bin\Debug\net5.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
