@@ -2,7 +2,7 @@
 
 namespace Upico.Core.Repositories
 {
-    public interface IPostedImage:IRepository<PostedImage>
+    public interface IPostedImageRepository : IRepository<PostedImage>
     {
     }
 }

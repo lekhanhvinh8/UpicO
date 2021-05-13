@@ -13,7 +13,7 @@ namespace Upico.Persistence
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Like> Likes { get; set; }
         public DbSet<Post> Posts { get; set; }
-        public DbSet<PostImage> PostImages { get; set; }
+        public DbSet<PostedImage> PostImages { get; set; }
         public UpicODbContext(DbContextOptions<UpicODbContext> options)
             :base(options)
         {
