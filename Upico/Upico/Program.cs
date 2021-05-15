@@ -28,7 +28,7 @@ namespace Upico
                 var context = services.GetRequiredService<UpicODbContext>();
                 var userManager = services.GetRequiredService<UserManager<AppUser>>();
                 var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-                await context.Database.MigrateAsync();
+                //await context.Database.MigrateAsync();
                 await Seed.SeedData(userManager, roleManager);
             }
             catch (Exception ex)
@@ -37,7 +37,7 @@ namespace Upico
                 logger.LogError(ex, "An error occured during migraiton");
             }
 
-            //await host.RunAsync();
+            await host.RunAsync();
             */
             
 

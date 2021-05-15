@@ -14,6 +14,8 @@ using Upico.Core;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Upico.Core.Services;
+using Upico.Persistence.Service;
 
 namespace Upico
 {
@@ -32,7 +34,6 @@ namespace Upico
             //For identity.entityframworkcore.
             services.AddDbContext<UpicODbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("default")));
 
-
             services.AddIdentity<AppUser, IdentityRole>(opt =>
             {
                 opt.Password.RequireNonAlphanumeric = false;
@@ -43,14 +44,11 @@ namespace Upico
                 .AddEntityFrameworkStores<UpicODbContext>()
                 .AddDefaultTokenProviders();
 
-
-
-            services.AddAuthentication();
-
             //Injecting interface
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IUserService, UserService>();
 
-            // the context that pass to AvatarRepository and UnitOfWork in runtime is the same class.
+            // the context that pass to AvatarRepository and UnitOfWork in runtime is the same object.
             services.AddScoped<IAvatarRepository, AvatarRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IPostRepository, PostRepository>();
@@ -60,7 +58,6 @@ namespace Upico
 
             //For auto mapper
             services.AddAutoMapper(typeof(Startup));
-
 
             //Default
             services.AddControllers();
@@ -97,9 +94,13 @@ namespace Upico
                     }
                 });
             });
+
+
+            //For authentication and authorization
             string issuer = Configuration.GetValue<string>("Tokens:Issuer");
             string signingKey = Configuration.GetValue<string>("Tokens:Key");
             byte[] signingKeyBytes = System.Text.Encoding.UTF8.GetBytes(signingKey);
+
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
