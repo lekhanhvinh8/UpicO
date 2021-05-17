@@ -6,6 +6,6 @@ namespace Upico.Core.Repositories
 {
     public interface IAvatarRepository : IRepository<Avatar>
     {
-        public Task<List<Avatar>> GetAvatar(string userName);
+        public Task<List<Avatar>> GetAvatars(string userName);
     }
 }

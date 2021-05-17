@@ -16,7 +16,7 @@ namespace Upico.Persistence.Repositories
         {
             this._context = context;
         }
-        public async Task<List<Avatar>> GetAvatar(string userName)
+        public async Task<List<Avatar>> GetAvatars(string userName)
         {
             var avatars = await this._context.Avatars.Where(a => a.AppUser.UserName == userName).ToListAsync();
 

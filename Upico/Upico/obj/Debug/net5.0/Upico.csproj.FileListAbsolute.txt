@@ -202,3 +202,6 @@ C:\MyData\OnGoingProjects\UpicO\UpicO\Upico\Upico\obj\Debug\net5.0\Upico.dll
 C:\MyData\OnGoingProjects\UpicO\UpicO\Upico\Upico\obj\Debug\net5.0\ref\Upico.dll
 C:\MyData\OnGoingProjects\UpicO\UpicO\Upico\Upico\obj\Debug\net5.0\Upico.pdb
 C:\MyData\OnGoingProjects\UpicO\UpicO\Upico\Upico\obj\Debug\net5.0\Upico.genruntimeconfig.cache
+C:\MyData\OnGoingProjects\UpicO\UpicO\Upico\Upico\bin\Debug\net5.0\CloudinaryDotNet.dll
+C:\MyData\OnGoingProjects\UpicO\UpicO\Upico\Upico\bin\Debug\net5.0\Microsoft.Extensions.WebEncoders.dll
+C:\MyData\OnGoingProjects\UpicO\UpicO\Upico\Upico\bin\Debug\net5.0\Newtonsoft.Json.dll

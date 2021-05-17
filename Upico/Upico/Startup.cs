@@ -47,6 +47,7 @@ namespace Upico
             //Injecting interface
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IPhotoService, PhotoService>();
 
             // the context that pass to AvatarRepository and UnitOfWork in runtime is the same object.
             services.AddScoped<IAvatarRepository, AvatarRepository>();
