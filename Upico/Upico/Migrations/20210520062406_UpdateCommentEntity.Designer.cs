@@ -3,36 +3,23 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Upico.Persistence;
 
 namespace Upico.Migrations
 {
     [DbContext(typeof(UpicODbContext))]
-    partial class UpicODbContextModelSnapshot : ModelSnapshot
+    [Migration("20210520062406_UpdateCommentEntity")]
+    partial class UpdateCommentEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.5")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("AppUserAppUser", b =>
-                {
-                    b.Property<string>("FollowersId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("FollowingsId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("FollowersId", "FollowingsId");
-
-                    b.HasIndex("FollowingsId");
-
-                    b.ToTable("AppUserAppUser");
-                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -360,21 +347,6 @@ namespace Upico.Migrations
                     b.HasIndex("PostId");
 
                     b.ToTable("PostImages");
-                });
-
-            modelBuilder.Entity("AppUserAppUser", b =>
-                {
-                    b.HasOne("Upico.Core.Domain.AppUser", null)
-                        .WithMany()
-                        .HasForeignKey("FollowersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Upico.Core.Domain.AppUser", null)
-                        .WithMany()
-                        .HasForeignKey("FollowingsId")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

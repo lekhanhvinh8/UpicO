@@ -16,7 +16,8 @@ namespace Upico.Core.Domain
 
         public AppUser User { set; get; }
         public Post Post { set; get; }
-        //public Comment Parent { set; get; }
+        public Comment Parent { set; get; }
+        public List<Comment> Comments { get; set; }
 
     }
 }

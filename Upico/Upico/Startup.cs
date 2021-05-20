@@ -21,6 +21,7 @@ namespace Upico
 {
     public class Startup
     {
+        private readonly string _myAllowSpecificOrigins = "AllowSpecficOrigins";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -31,6 +32,21 @@ namespace Upico
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+
+            services.AddCors(options => {
+
+                options.AddPolicy(name: _myAllowSpecificOrigins,
+                    builder => {
+                        builder.WithOrigins("http://localhost:5000", "http://localhost:3000")
+                            .AllowAnyOrigin()
+                            .AllowAnyMethod()
+                            .AllowAnyHeader()
+                            .WithExposedHeaders("Content-Range");
+
+                    });
+            });
+
             //For identity.entityframworkcore.
             services.AddDbContext<UpicODbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("default")));
 
@@ -135,6 +151,8 @@ namespace Upico
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Upico v1"));
             }
+            
+            app.UseCors(_myAllowSpecificOrigins);
 
             app.UseStaticFiles();
 

@@ -7,7 +7,7 @@ namespace Upico.Core.Domain
 {
     public class PostedImage
     {
-        public Guid Id { set; get; }
+        public string Id { set; get; }
         public Guid PostId { set; get; }
         public string Path { set; get; }
         public DateTime DateCreate { set; get; }

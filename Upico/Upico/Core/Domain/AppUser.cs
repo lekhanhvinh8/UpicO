@@ -15,6 +15,8 @@ namespace Upico.Core.Domain
         public IList<Avatar> Avatars { get; set; }
         public IList<Comment> Comments { get; set; }
         public IList<Like> Likes { get; set; }
+        public IList<AppUser> Followers { get; set; }
+        public IList<AppUser> Followings { get; set; }
         public AppUser()
         {
             Posts = new List<Post>();

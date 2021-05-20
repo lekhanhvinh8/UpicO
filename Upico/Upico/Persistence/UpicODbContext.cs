@@ -29,7 +29,7 @@ namespace Upico.Persistence
             builder.ApplyConfiguration(new LikeConfigurations());
             builder.ApplyConfiguration(new PostConfigurations());
             builder.ApplyConfiguration(new PostImageConfigurations());
-
+            builder.ApplyConfiguration(new AppUserConfiguration());
 
         }
     }

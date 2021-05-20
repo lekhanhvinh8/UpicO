@@ -31,26 +31,46 @@ namespace Upico.Persistence.Service
             {
                 await using var stream = file.OpenReadStream();
 
-                var uploadParams = new ImageUploadParams
+                try
                 {
-                    File = new FileDescription(file.FileName, stream),
-                    Transformation = new Transformation().Height(500).Width(500).Crop("fill")
-                };
+                    var uploadParams = new ImageUploadParams
+                    {
+                        File = new FileDescription(file.FileName, stream),
+                        Transformation = new Transformation().Height(500).Width(500).Crop("fill")
+                    };
 
-                var uploadResult = await _cloudinary.UploadAsync(uploadParams);
+                    var uploadResult = await _cloudinary.UploadAsync(uploadParams);
 
-                if (uploadResult.Error != null)
-                    throw new Exception(uploadResult.Error.Message);
+                    if (uploadResult.Error != null)
+                        throw new Exception(uploadResult.Error.Message);
 
-                return new Photo
+                    return new Photo
+                    {
+                        Id = uploadResult.PublicId,
+                        Url = uploadResult.SecureUrl.ToString()
+                    };
+                }
+                catch(System.Net.Http.HttpRequestException e)
                 {
-                    Id = uploadResult.PublicId,
-                    Url = uploadResult.SecureUrl.ToString()
-                };
-
+                    Console.WriteLine(e);
+                }
+                
             }
 
             return null;
+        }
+
+        public async Task<IList<Photo>> AddPhotos(IFormCollection files)
+        {
+            var photos = new List<Photo>();
+
+            foreach (var file in files.Files)
+            {
+                var photo = await AddPhoto(file);
+                photos.Add(photo);
+            }
+            
+            return photos;
         }
 
         public async Task<string> DeletePhoto(string id)

@@ -13,6 +13,9 @@ namespace Upico.Mapping
         public MappingProfile()
         {
             CreateMap<Avatar, AvatarResource>();
+
+            CreateMap<CreatePostResource, Post>();
+            CreateMap<Post, PostResouce>();
         }
     }
 }
