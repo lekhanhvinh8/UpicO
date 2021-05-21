@@ -74,10 +74,9 @@ namespace Upico.Controllers
             user.Posts.Add(post);
             await this._unitOfWork.Complete();
 
-            return Ok();
+            var result = this._mapper.Map<Post, PostResouce>(post);
+            return Ok(result);
         }
-
-
 
     }
 }
