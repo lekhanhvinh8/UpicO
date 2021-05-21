@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Upico.Core.CloudPhoto
+namespace Upico.Controllers.Resouces
 
 {
-    public class Photo
+    public class PhotoResource
     {
         public string Id { get; set; }
         public string Url { get; set; }

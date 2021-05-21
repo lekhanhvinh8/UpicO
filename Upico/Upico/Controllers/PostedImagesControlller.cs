@@ -5,8 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Upico.Controllers.Resouces;
 using Upico.Core;
-using Upico.Core.CloudPhoto;
 using Upico.Core.Domain;
 using Upico.Core.Services;
 
@@ -38,18 +38,7 @@ namespace Upico.Controllers
             //Load all photos of post
             await this._unitOfWork.PostedImages.Load(i => i.PostId == post.Id);
 
-            var photos = new List<Photo>();
-
-            foreach (var postedImage in post.PostImages)
-            {
-                var photo = new Photo()
-                {
-                    Id = postedImage.Id,
-                    Url = postedImage.Path
-                };
-
-                photos.Add(photo);
-            }
+            var photos = this._mapper.Map<IList<PostedImage>, IList<PhotoResource>>(post.PostImages);
 
             return Ok(photos);
         }
@@ -77,6 +66,29 @@ namespace Upico.Controllers
 
                 post.PostImages.Add(postedImage);
             }
+
+            await this._unitOfWork.Complete();
+
+            return Ok();
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeletePhotos(string postId)
+        {
+            var post = await this._unitOfWork.Posts.SingleOrDefault(p => p.Id == new Guid(postId));
+            if (post == null)
+                return NotFound();
+
+            //Load all images of post
+            await this._unitOfWork.PostedImages.Load(p => p.PostId == post.Id);
+
+            var postedImages = post.PostImages;
+            var postedImageIds = postedImages.Select(p => p.Id).ToList();
+
+            await this._photoService.DeletePhotos(postedImageIds);
+
+            post.PostImages.Clear();
+            this._unitOfWork.PostedImages.RemoveRange(postedImages);
 
             await this._unitOfWork.Complete();
 

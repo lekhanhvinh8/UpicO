@@ -11,7 +11,5 @@ namespace Upico.Controllers.Resources
         public string Path { get; set; }
         public DateTime UploadTime { get; set; }
         public int IsMain { get; set; }
-        public string UserID { get; set; }
-
     }
 }

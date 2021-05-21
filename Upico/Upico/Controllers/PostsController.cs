@@ -21,13 +21,10 @@ namespace Upico.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly IPhotoService _photoService;
-
         public PostsController(IUnitOfWork unitOfWork, IMapper mapper, IPhotoService photoService)
         {
             this._unitOfWork = unitOfWork;
             this._mapper = mapper;
-            this._photoService = photoService;
         }
 
         [HttpGet("user/{userName}")]
@@ -56,8 +53,12 @@ namespace Upico.Controllers
                 return NotFound();
 
             await this._unitOfWork.PostedImages.Load(i => i.PostId == post.Id);
+            await this._unitOfWork.Likes.Load(l => l.PostId == post.Id);
+            await this._unitOfWork.Comments.Load(c => c.PostId == post.Id);
 
-            return Ok(post);
+            var result = this._mapper.Map<Post, DetailedPostResource>(post);
+
+            return Ok(result);
         }
 
         [HttpPost]

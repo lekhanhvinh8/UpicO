@@ -49,8 +49,8 @@ namespace Upico.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{photoId}")]
-        public async Task<IActionResult> Get(string userName, string photoId)
+        [HttpGet("main")]
+        public async Task<IActionResult> GetMain(string userName)
         {
             if (!IsUser(userName))
                 return Unauthorized();
@@ -59,7 +59,7 @@ namespace Upico.Controllers
             if (user == null)
                 return NotFound();
 
-            var avatar = await this._unitOfWork.Avatars.SingleOrDefault(a => a.UserID == user.Id && a.Id == photoId);
+            var avatar = await this._unitOfWork.Avatars.SingleOrDefault(a => a.UserID == user.Id && a.IsMain == true);
             if (avatar == null)
                 return NotFound();
 
@@ -74,11 +74,11 @@ namespace Upico.Controllers
                 return Unauthorized();
 
             if (file == null)
-                return BadRequest();
+                return BadRequest("no file");
 
             var user = await this._unitOfWork.Users.GetUser(userName);
             if (user == null)
-                return BadRequest();
+                return NotFound();
 
             //Get main avatar of user
             var oldAvatar = await this._unitOfWork.Avatars.SingleOrDefault(a => a.UserID == user.Id && a.IsMain == true);
@@ -111,14 +111,14 @@ namespace Upico.Controllers
 
             var user = await this._unitOfWork.Users.GetUser(userName);
             if (user == null)
-                return BadRequest("User not existed");
+                return NotFound();
 
             //Load all avatars of user
             await this._unitOfWork.Avatars.Load(a => a.UserID == user.Id);
 
             var avatar = user.Avatars.FirstOrDefault(a => a.Id == photoId);
             if (avatar == null)
-                return BadRequest("User does not have that avatar");
+                return NotFound();
 
             if (avatar.IsMain)
                 return BadRequest("Can not delete main avatar");
@@ -131,6 +131,8 @@ namespace Upico.Controllers
 
             // Delete photo from database
             user.Avatars.Remove(avatar);
+            this._unitOfWork.Avatars.Remove(avatar);
+
             await this._unitOfWork.Complete();
 
             return Ok();

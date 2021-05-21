@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "OBfEaZZvay6p18rcDCzHspPxy8Vrj/TxaihIHqdRrSRC3MY4A/AR7XIJCsE3ydGnWaOoufLEZcThFBcHXhBLPg==",
+  "dgSpecHash": "JHvwHhwXBptwaPsETEWdWUInB1v2ZhgSol5T3844hRR8vEGfuf4EbTEagnsq+3IoGotnETu8TCCRg4IQGTHq4g==",
   "success": true,
-  "projectFilePath": "C:\\MyData\\OnGoingProjects\\UpicO\\UpicO\\Upico\\Upico\\Upico.csproj",
+  "projectFilePath": "C:\\MyData\\OnGoingProjects\\UpicO\\ServerSide\\UpicO\\Upico\\Upico\\Upico.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\lekha\\.nuget\\packages\\automapper\\10.1.1\\automapper.10.1.1.nupkg.sha512",
     "C:\\Users\\lekha\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\8.1.1\\automapper.extensions.microsoft.dependencyinjection.8.1.1.nupkg.sha512",

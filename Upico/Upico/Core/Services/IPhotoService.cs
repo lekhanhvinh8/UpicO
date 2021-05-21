@@ -1,14 +1,15 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Upico.Core.CloudPhoto;
+using Upico.Controllers.Resouces;
 
 namespace Upico.Core.Services
 {
     public interface IPhotoService
     {
-        public Task<Photo> AddPhoto(IFormFile file);
-        public Task<IList<Photo>> AddPhotos(IFormCollection files);
+        public Task<PhotoResource> AddPhoto(IFormFile file);
+        public Task<IList<PhotoResource>> AddPhotos(IFormCollection files);
         public Task<string> DeletePhoto(string id);
+        public Task<string> DeletePhotos(IList<string> ids);
     }
 }

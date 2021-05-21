@@ -1,13 +1,11 @@
 ﻿using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Upico.Core.CloudPhoto;
+using Upico.Controllers.Resouces;
 using Upico.Core.Services;
 
 namespace Upico.Persistence.Service
@@ -25,7 +23,7 @@ namespace Upico.Persistence.Service
 
             _cloudinary = new Cloudinary(account);
         }
-        public async Task<Photo> AddPhoto(IFormFile file)
+        public async Task<PhotoResource> AddPhoto(IFormFile file)
         {
             if(file.Length > 0)
             {
@@ -44,7 +42,7 @@ namespace Upico.Persistence.Service
                     if (uploadResult.Error != null)
                         throw new Exception(uploadResult.Error.Message);
 
-                    return new Photo
+                    return new PhotoResource
                     {
                         Id = uploadResult.PublicId,
                         Url = uploadResult.SecureUrl.ToString()
@@ -60,9 +58,9 @@ namespace Upico.Persistence.Service
             return null;
         }
 
-        public async Task<IList<Photo>> AddPhotos(IFormCollection files)
+        public async Task<IList<PhotoResource>> AddPhotos(IFormCollection files)
         {
-            var photos = new List<Photo>();
+            var photos = new List<PhotoResource>();
 
             foreach (var file in files.Files)
             {
@@ -80,6 +78,20 @@ namespace Upico.Persistence.Service
             var deleteResult = await _cloudinary.DestroyAsync(deleteParams);
 
             return deleteResult.Result == "ok" ? deleteResult.Result : null;
+        }
+
+        public async Task<string> DeletePhotos(IList<string> ids)
+        {
+            foreach (var id in ids)
+            {
+                var deleteResult = await DeletePhoto(id);
+
+                if (deleteResult == null)
+                    throw new Exception("An error occur when deleting a photo from coundinary");
+
+            }
+
+            return "ok";
         }
     }
 }

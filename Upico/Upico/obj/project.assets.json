@@ -5954,11 +5954,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\MyData\\OnGoingProjects\\UpicO\\UpicO\\Upico\\Upico\\Upico.csproj",
+      "projectUniqueName": "C:\\MyData\\OnGoingProjects\\UpicO\\ServerSide\\UpicO\\Upico\\Upico\\Upico.csproj",
       "projectName": "Upico",
-      "projectPath": "C:\\MyData\\OnGoingProjects\\UpicO\\UpicO\\Upico\\Upico\\Upico.csproj",
+      "projectPath": "C:\\MyData\\OnGoingProjects\\UpicO\\ServerSide\\UpicO\\Upico\\Upico\\Upico.csproj",
       "packagesPath": "C:\\Users\\lekha\\.nuget\\packages\\",
-      "outputPath": "C:\\MyData\\OnGoingProjects\\UpicO\\UpicO\\Upico\\Upico\\obj\\",
+      "outputPath": "C:\\MyData\\OnGoingProjects\\UpicO\\ServerSide\\UpicO\\Upico\\Upico\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
