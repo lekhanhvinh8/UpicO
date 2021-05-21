@@ -9,7 +9,7 @@ namespace Upico.Core.Domain
     {
         public Guid Id { set; get; }
         public string UserId { set; get; }
-        public Guid PostId { set; get; }
+        public Guid? PostId { set; get; }
         public Guid? ParentId { set; get; }
         public string Content { set; get; }
         public DateTime DateCreate { set; get; }
@@ -17,7 +17,11 @@ namespace Upico.Core.Domain
         public AppUser User { set; get; }
         public Post Post { set; get; }
         public Comment Parent { set; get; }
-        public List<Comment> Comments { get; set; }
+        public IList<Comment> Childs { get; set; }
+        public Comment()
+        {
+            this.Childs = new List<Comment>();
+        }
 
     }
 }

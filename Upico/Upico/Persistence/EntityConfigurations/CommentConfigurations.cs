@@ -18,7 +18,7 @@ namespace Upico.Persistence.EntityConfigurations
             builder.HasOne(a => a.Post).WithMany(i => i.Comments).HasForeignKey(a => a.PostId);
 
             builder.HasOne(c => c.Parent)
-                .WithMany(pc => pc.Comments)
+                .WithMany(pc => pc.Childs)
                 .OnDelete(DeleteBehavior.NoAction);
 
             builder.Property(a => a.Content).IsRequired();

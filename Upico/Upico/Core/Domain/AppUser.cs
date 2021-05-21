@@ -14,7 +14,7 @@ namespace Upico.Core.Domain
         public IList<Post> Posts { set; get; }
         public IList<Avatar> Avatars { get; set; }
         public IList<Comment> Comments { get; set; }
-        public IList<Like> Likes { get; set; }
+        public IList<Post> Likes { get; set; }
         public IList<AppUser> Followers { get; set; }
         public IList<AppUser> Followings { get; set; }
         public AppUser()
@@ -22,7 +22,9 @@ namespace Upico.Core.Domain
             Posts = new List<Post>();
             this.Avatars = new List<Avatar>();
             Comments = new List<Comment>();
-            Likes = new List<Like>();
+            Likes = new List<Post>();
+            Followers = new List<AppUser>();
+            Followings = new List<AppUser>();
         }
     }
 }

@@ -12,7 +12,6 @@ namespace Upico.Core
         IUserRepository Users { get; }
         IPostRepository Posts { get; }
         IPostedImageRepository PostedImages { get; }
-        ILikeRepository Likes { get; }
         ICommentRepository Comments { get; }
         Task<int> Complete();
     }

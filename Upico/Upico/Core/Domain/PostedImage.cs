@@ -10,8 +10,6 @@ namespace Upico.Core.Domain
         public string Id { set; get; }
         public Guid PostId { set; get; }
         public string Path { set; get; }
-        public DateTime DateCreate { set; get; }
-
         public Post Post { set; get; }
     }
 }

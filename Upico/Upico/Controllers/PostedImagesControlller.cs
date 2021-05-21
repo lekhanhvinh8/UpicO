@@ -61,7 +61,6 @@ namespace Upico.Controllers
                 {
                     Id = photo.Id,
                     Path = photo.Url,
-                    DateCreate = DateTime.Now,
                 };
 
                 post.PostImages.Add(postedImage);

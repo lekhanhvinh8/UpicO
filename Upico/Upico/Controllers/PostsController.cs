@@ -45,16 +45,44 @@ namespace Upico.Controllers
 
         } 
 
+        [HttpGet("user/{userName}/{numPosts}")]
+        public async Task<IActionResult> GetRelatedPosts(string userName, int numPosts)
+        {
+            var user = await this._unitOfWork.Users.GetUser(userName);
+            if (user == null)
+                return NotFound();
+
+            var posts = await this._unitOfWork.Posts.GetRelatedPosts(userName, numPosts);
+
+            var result = this._mapper.Map<IList<Post>, IList<DetailedPostResource>>(posts);
+
+            return Ok(result);
+        }
+
+        [HttpGet("user/{userName}/{latestPostId}/{numPosts}")]
+        public async Task<IActionResult> GetRelatedPostsBefore(string userName, string latestPostId, int numPosts)
+        {
+            var user = await this._unitOfWork.Users.GetUser(userName);
+            if (user == null)
+                return NotFound();
+
+            var latestPost = await this._unitOfWork.Posts.SingleOrDefault(p => p.Id.ToString() == latestPostId);
+            if (latestPost == null)
+                return NotFound();
+
+            var posts = await this._unitOfWork.Posts.GetRelatedPostsBefore(userName, latestPostId, numPosts);
+
+            var result = this._mapper.Map<IList<Post>, IList<DetailedPostResource>>(posts);
+
+            return Ok(result);
+        }
+
         [HttpGet("{postId}")]
         public async Task<IActionResult> GetPostDetail(string postId)
         {
-            var post = await this._unitOfWork.Posts.SingleOrDefault(p => p.Id.ToString() == postId);
+            var post = await this._unitOfWork.Posts.GetPostDetail(postId);
             if (post == null)
                 return NotFound();
-
-            await this._unitOfWork.PostedImages.Load(i => i.PostId == post.Id);
-            await this._unitOfWork.Likes.Load(l => l.PostId == post.Id);
-            await this._unitOfWork.Comments.Load(c => c.PostId == post.Id);
 
             var result = this._mapper.Map<Post, DetailedPostResource>(post);
 

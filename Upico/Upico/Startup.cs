@@ -64,13 +64,13 @@ namespace Upico
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IPhotoService, PhotoService>();
+            services.AddScoped<IPostService, PostService>();
 
             // the context that pass to AvatarRepository and UnitOfWork in runtime is the same object.
             services.AddScoped<IAvatarRepository, AvatarRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IPostRepository, PostRepository>();
             services.AddScoped<IPostedImageRepository, PostedImageRepository>();
-            services.AddScoped<ILikeRepository, LikeRepository>();
             services.AddScoped<ICommentRepository, CommentRepository>();
 
             //For auto mapper

@@ -14,12 +14,12 @@ namespace Upico.Core.Domain
 
         public AppUser User { set; get; }
         public IList<PostedImage> PostImages { set; get; }
-        public IList<Like> Likes { set; get; }
+        public IList<AppUser> Likes { set; get; }
         public IList<Comment> Comments { set; get; }
         public Post()
         {
             PostImages = new List<PostedImage>();
-            Likes = new List<Like>();
+            Likes = new List<AppUser>();
             Comments = new List<Comment>();
         }
     }

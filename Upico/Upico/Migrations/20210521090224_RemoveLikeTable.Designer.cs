@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Upico.Persistence;
 
 namespace Upico.Migrations
 {
     [DbContext(typeof(UpicODbContext))]
-    partial class UpicODbContextModelSnapshot : ModelSnapshot
+    [Migration("20210521090224_RemoveLikeTable")]
+    partial class RemoveLikeTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -301,7 +303,7 @@ namespace Upico.Migrations
                     b.Property<Guid?>("ParentId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("PostId")
+                    b.Property<Guid>("PostId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("UserId")
@@ -452,13 +454,15 @@ namespace Upico.Migrations
             modelBuilder.Entity("Upico.Core.Domain.Comment", b =>
                 {
                     b.HasOne("Upico.Core.Domain.Comment", "Parent")
-                        .WithMany("Childs")
+                        .WithMany("Comments")
                         .HasForeignKey("ParentId")
                         .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("Upico.Core.Domain.Post", "Post")
                         .WithMany("Comments")
-                        .HasForeignKey("PostId");
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Upico.Core.Domain.AppUser", "User")
                         .WithMany("Comments")
@@ -502,7 +506,7 @@ namespace Upico.Migrations
 
             modelBuilder.Entity("Upico.Core.Domain.Comment", b =>
                 {
-                    b.Navigation("Childs");
+                    b.Navigation("Comments");
                 });
 
             modelBuilder.Entity("Upico.Core.Domain.Post", b =>

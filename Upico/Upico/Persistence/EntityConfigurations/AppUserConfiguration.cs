@@ -15,6 +15,8 @@ namespace Upico.Persistence.EntityConfigurations
             builder.HasMany(u => u.Followers)
                 .WithMany(u => u.Followings);
 
+            builder.HasMany(u => u.Likes)
+                .WithMany(p => p.Likes).UsingEntity(a => a.ToTable("Likes"));
         }
     }
 }

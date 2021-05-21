@@ -17,7 +17,6 @@ namespace Upico.Persistence
             IUserRepository userRepository,
             IPostRepository postRepository,
             IPostedImageRepository postedImageRepository,
-            ILikeRepository likeRepository,
             ICommentRepository commentRepository)
         {
             //a data context that be injected in runtime is the same for both UnitOfWork and CustomRepository
@@ -31,7 +30,6 @@ namespace Upico.Persistence
             Users = userRepository;
             Posts = postRepository;
             PostedImages = postedImageRepository;
-            Likes = likeRepository;
             Comments = commentRepository;
         }
 
@@ -39,7 +37,6 @@ namespace Upico.Persistence
         public IUserRepository Users { get; private set; }
         public IPostRepository Posts { get; private set; }
         public IPostedImageRepository PostedImages { get; private set; }
-        public ILikeRepository Likes { get; private set; }
         public ICommentRepository Comments { get; private set; }
 
         public async Task<int> Complete()
