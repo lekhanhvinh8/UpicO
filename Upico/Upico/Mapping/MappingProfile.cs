@@ -11,18 +11,41 @@ namespace Upico.Mapping
         public MappingProfile()
         {
             CreateMap<Avatar, AvatarResource>();
+            CreateMap<AppUser, UserResource>();
             CreateMap<PostedImage, PhotoResource>()
                 .ForMember(pt => pt.Url, opt => opt.MapFrom(pi => pi.Path));
-
-
             CreateMap<Post, PostResouce>();
             CreateMap<Post, DetailedPostResource>()
                 .ForMember(dp => dp.Comments, opt => opt.MapFrom(p => p.Comments.Select(pf => pf.Content)))
                 .ForMember(dp => dp.Likes, opt => opt.MapFrom(p => p.Likes.Count()))
                 .ForMember(dp => dp.DisplayName, opt => opt.MapFrom(p => p.User.DisplayName))
                 .ForMember(dp => dp.AvatarUrl, opt => opt.MapFrom(p => p.User.Avatars.FirstOrDefault(a => a.IsMain).Path));
+            CreateMap<Comment, CommentResouce>()
+                .ForMember(cr => cr.Childs, opt => opt.Ignore())
+                .AfterMap((c, cr) => {
+                    MapChildren(c, cr);
+                });
 
             CreateMap<CreatePostResource, Post>();
+        }
+
+        private void MapChildren(Comment comment, CommentResouce commentResouce)
+        {
+            //base mapping
+            commentResouce.Id = comment.Id;
+
+            //Child mapping
+            if (comment.Childs.Count == 0)
+                return;
+
+            foreach (var child in comment.Childs)
+            {
+                var commentResourceChild = new CommentResouce();
+                MapChildren(child, commentResourceChild);
+
+                commentResouce.Childs.Add(commentResourceChild);
+            }
+
         }
     }
 }

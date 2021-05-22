@@ -91,7 +91,7 @@ namespace Upico.Persistence.Service
             //check username
             if (user != null)
             {
-                listError.Add("Username is existed");
+                listError.Add("Username already exists");
             }
 
             user = new AppUser()

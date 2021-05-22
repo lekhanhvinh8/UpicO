@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Upico.Controllers.Resources;
 using Upico.Core;
+using Upico.Core.Domain;
 using Upico.Core.Services;
 
 namespace Upico.Controllers
@@ -15,11 +16,13 @@ namespace Upico.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
 
-        public UsersController(IUserService userService, IUnitOfWork unitOfWork)
+        public UsersController(IUserService userService, IMapper mapper, IUnitOfWork unitOfWork)
         {
             _userService = userService;
+            _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
 
@@ -35,14 +38,14 @@ namespace Upico.Controllers
             return Ok(result);
         }
 
-        /*
+        
         [HttpGet("{username}")]
         public async Task<IActionResult> GetUserByName(string username)
         {
             var result = await _userService.GetUser(username);
 
             if (result == null)
-                return BadRequest("User không tồn tại");
+                return BadRequest();
 
             var user = User;
             var claimName = user.FindFirst(ClaimTypes.Name);
@@ -50,9 +53,10 @@ namespace Upico.Controllers
             if (claimName.Value != username)
                 return Unauthorized();
 
-            return Ok(result);
+            var userResource = this._mapper.Map<AppUser, UserResource>(result);
+            return Ok(userResource);
         }
-        */
+        
 
         [HttpPost]
         [AllowAnonymous]
@@ -60,8 +64,8 @@ namespace Upico.Controllers
         {
             var errors = await _userService.Register(user);
             var error = new {
-                EmaiError = "Email already in use",
-                UserNameError = "Username is existed",
+                EmailError = "Email already in use",
+                UserNameError = "Username already exists",
             };
 
             if (errors == null)
@@ -76,7 +80,7 @@ namespace Upico.Controllers
                     {
                         error = new
                         {
-                            EmaiError = "Email already in use",
+                            EmailError = "Email already in use",
                             UserNameError = "",
                         };
                     }
@@ -84,8 +88,8 @@ namespace Upico.Controllers
                     {
                         error = new
                         {
-                            EmaiError = "",
-                            UserNameError = "Username is existed",
+                            EmailError = "",
+                            UserNameError = "Username already exists",
                         };
                     }
                 }
