@@ -75,19 +75,23 @@ namespace Upico.Persistence.Service
             return await _userManager.FindByNameAsync(userName);
         }
 
-        public async Task<string> Register(RegisterRequest request)
+        public async Task<IList<string>> Register(RegisterRequest request)
         {
+
+            var listError = new List<string>();
+
             var user = await _userManager.FindByNameAsync(request.Username);
-            //check username
-            if (user != null)
-            {
-                return "Tài khoản đã tồn tại";
-            }
 
             //check email
             if (await _userManager.FindByEmailAsync(request.Email) != null)
             {
-                return "Email đã dược sử dụng";
+                listError.Add("Email already in use");
+            }
+
+            //check username
+            if (user != null)
+            {
+                listError.Add("Username is existed");
             }
 
             user = new AppUser()
@@ -98,11 +102,16 @@ namespace Upico.Persistence.Service
                 FullName = request.FullName,
                 Email = request.Email
             };
+
+            if (listError.Count != 0)
+                return listError;
+
             var result = await _userManager.CreateAsync(user, request.Password);
 
             if (result.Succeeded)
                 return null;
-            return "lỗi";
+
+            throw new Exception("Error when creating user!! oh yeah");
         }
     }
 }

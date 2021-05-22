@@ -35,6 +35,7 @@ namespace Upico.Controllers
             return Ok(result);
         }
 
+        /*
         [HttpGet("{username}")]
         public async Task<IActionResult> GetUserByName(string username)
         {
@@ -51,18 +52,46 @@ namespace Upico.Controllers
 
             return Ok(result);
         }
+        */
 
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] RegisterRequest user)
         {
-            var result = await _userService.Register(user);
+            var errors = await _userService.Register(user);
+            var error = new {
+                EmaiError = "Email already in use",
+                UserNameError = "Username is existed",
+            };
 
-            if (string.IsNullOrEmpty(result))
+            if (errors == null)
             {
                 return Ok();
             }
-            return BadRequest(result);
+            else
+            {
+                if (errors.Count == 1)
+                {
+                    if (errors[0] == "Email already in use")
+                    {
+                        error = new
+                        {
+                            EmaiError = "Email already in use",
+                            UserNameError = "",
+                        };
+                    }
+                    else
+                    {
+                        error = new
+                        {
+                            EmaiError = "",
+                            UserNameError = "Username is existed",
+                        };
+                    }
+                }
+            }
+
+            return BadRequest(error);
         }
 
         [HttpGet("{sourceUsername}/{targetUsername}")]

@@ -30,5 +30,14 @@ namespace Upico.Persistence.Repositories
 
             return user;
         }
+
+        public async Task<AppUser> GetUserWithLikes(string userName)
+        {
+            var user = await this._context.Users
+                .Include(u => u.Likes)
+                .SingleOrDefaultAsync(u => u.UserName == userName);
+
+            return user;
+        }
     }
 }

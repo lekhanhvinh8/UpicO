@@ -10,5 +10,6 @@ namespace Upico.Core.Repositories
     public interface IUserRepository
     {
         public Task<AppUser> GetUser(string userName);
+        public Task<AppUser> GetUserWithLikes(string userName);
     }
 }
