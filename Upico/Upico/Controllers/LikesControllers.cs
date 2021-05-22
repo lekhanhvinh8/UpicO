@@ -19,6 +19,26 @@ namespace Upico.Controllers
             this._unitOfWork = unitOfWork;
         }
 
+        [HttpGet("count")]
+        public async Task<IActionResult> GetCount(string postId)
+        {
+            var post = await this._unitOfWork.Posts.GetPostDetail(postId);
+            if (post == null)
+                return NotFound();
+
+            return Ok(post.Likes.Count());
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Get(string postId)
+        {
+            var post = await this._unitOfWork.Posts.GetPostDetail(postId);
+            if (post == null)
+                return NotFound();
+
+            return Ok(post.Likes.Select(u => u.UserName));
+        }
+
         [HttpPost]
         public async Task<IActionResult> Like(string username, string postId)
         {
@@ -30,7 +50,7 @@ namespace Upico.Controllers
                 return NotFound();
 
             if (user.Likes.Contains(post))
-                return BadRequest("User has already liked this post");
+                return BadRequest("The user has already liked this post");
 
             user.Likes.Add(post);
             await this._unitOfWork.Complete();
@@ -48,7 +68,7 @@ namespace Upico.Controllers
                 return NotFound();
 
             if (!user.Likes.Contains(post))
-                return BadRequest("user has not liked this post yet");
+                return BadRequest("The User has not liked this post yet");
 
             user.Likes.Remove(post);
             await this._unitOfWork.Complete();
