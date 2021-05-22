@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Upico.Controllers.Resources
 {
-    public class SaveCommentResouce
+    public class CreatedCommentResouce
     {
         [Required]
-        public string UserName { set; get; }
+        public string Username { set; get; }
         [Required]
         public string Content { set; get; }
 

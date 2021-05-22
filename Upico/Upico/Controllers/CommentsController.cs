@@ -41,13 +41,13 @@ namespace Upico.Controllers
             return Ok(result);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Comment([FromBody] SaveCommentResouce commentResouce)
+        [HttpPost("comment")]
+        public async Task<IActionResult> Comment([FromBody] CreatedCommentResouce commentResouce)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var user = await _unitOfWork.Users.GetUser(commentResouce.UserName);
+            var user = await _unitOfWork.Users.GetUser(commentResouce.Username);
             if (user == null)
                 return BadRequest();
 
@@ -58,12 +58,53 @@ namespace Upico.Controllers
             var comment = new Comment();
             comment.Post = post;
             comment.User = user;
+            comment.Content = commentResouce.Content;
             comment.DateCreate = DateTime.Now;
 
             await this._unitOfWork.Comments.Add(comment);
+            await this._unitOfWork.Complete();
 
             return Ok();
         }
 
+        [HttpPost("reply")]
+        public async Task<IActionResult> Reply([FromBody] ReplyResource replyResouce)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var user = await _unitOfWork.Users.GetUser(replyResouce.Username);
+            if (user == null)
+                return BadRequest();
+
+            var commentParent = await _unitOfWork.Comments.SingleOrDefault(c => c.Id.ToString() == replyResouce.ParentId);
+            if (commentParent == null)
+                return BadRequest();
+
+            var comment = new Comment();
+            comment.Parent = commentParent;
+            comment.User = user;
+            comment.Content = replyResouce.Content;
+            comment.DateCreate = DateTime.Now;
+
+            await this._unitOfWork.Comments.Add(comment);
+            await this._unitOfWork.Complete();
+
+            return Ok();
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteComment(string commentId)
+        {
+            var comment = await this._unitOfWork.Comments.SingleOrDefault(c => c.Id.ToString() == commentId);
+            if (comment == null)
+                return BadRequest();
+
+            this._unitOfWork.Comments.RemoveAllChildren(commentId);
+            this._unitOfWork.Comments.Remove(comment);
+            await this._unitOfWork.Complete();
+
+            return Ok();
+        }
     }
 }

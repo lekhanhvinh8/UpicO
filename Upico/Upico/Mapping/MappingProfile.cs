@@ -31,8 +31,19 @@ namespace Upico.Mapping
 
         private void MapChildren(Comment comment, CommentResouce commentResouce)
         {
-            //base mapping
+            //basic mapping
             commentResouce.Id = comment.Id;
+            commentResouce.Content = comment.Content;
+            commentResouce.DateCreate = comment.DateCreate;
+            commentResouce.Username = comment.User.UserName;
+            commentResouce.UserDisplayName = comment.User.DisplayName;
+
+            var avatar = comment.User.Avatars.FirstOrDefault(a => a.IsMain);
+
+            if(avatar != null)
+                commentResouce.UserAvatarUrl = avatar.Path;
+            else
+                commentResouce.UserAvatarUrl = null;
 
             //Child mapping
             if (comment.Childs.Count == 0)
