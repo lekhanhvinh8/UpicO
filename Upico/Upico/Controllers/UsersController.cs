@@ -15,10 +15,12 @@ namespace Upico.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public UsersController(IUserService userService)
+        public UsersController(IUserService userService, IUnitOfWork unitOfWork)
         {
             _userService = userService;
+            _unitOfWork = unitOfWork;
         }
 
         [HttpPost("authenticate")]
@@ -61,6 +63,24 @@ namespace Upico.Controllers
                 return Ok();
             }
             return BadRequest(result);
+        }
+
+        [HttpGet("{sourceUsername}/{targetUsername}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Follow(string sourceUsername, string targetUsername)
+        {
+            var follower = await this._unitOfWork.Users.GetUser(sourceUsername);
+            if (follower == null)
+                return NotFound();
+
+            var following = await this._unitOfWork.Users.GetUser(targetUsername);
+            if (following == null)
+                return NotFound();
+
+            follower.Followings.Add(following);
+            await this._unitOfWork.Complete();
+
+            return Ok();
         }
     }
 }

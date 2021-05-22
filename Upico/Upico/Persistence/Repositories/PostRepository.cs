@@ -31,7 +31,8 @@ namespace Upico.Persistence.Repositories
         private async Task<IQueryable<Post>> GetRelatedPosts(string userName)
         {
             var user = await this._context.Users
-                .Include(u => u.Followings)
+                .Include(u => u.Avatars.Where(a => a.IsMain))
+                .Include(u => u.Followings).ThenInclude(f => f.Avatars.Where(a => a.IsMain))
                 .SingleOrDefaultAsync(u => u.UserName == userName);
 
             var relatedPost =  this._context.Posts.Where(p => p.UserId == user.Id || user.Followings.Select(u => u.Id).Contains(p.UserId));
