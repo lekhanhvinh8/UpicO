@@ -61,10 +61,15 @@ namespace Upico.Controllers
             comment.Content = commentResouce.Content;
             comment.DateCreate = DateTime.Now;
 
+            //Load Avatar of user
+            await this._unitOfWork.Avatars.Load(a => a.IsMain && a.UserID == user.Id);
+
             await this._unitOfWork.Comments.Add(comment);
             await this._unitOfWork.Complete();
 
-            return Ok();
+            var result = this._mapper.Map<Comment, CommentDetailResource>(comment);
+
+            return Ok(result);
         }
 
         [HttpPost("reply")]
@@ -87,10 +92,15 @@ namespace Upico.Controllers
             comment.Content = replyResouce.Content;
             comment.DateCreate = DateTime.Now;
 
+            //Load Avatar of user
+            await this._unitOfWork.Avatars.Load(a => a.IsMain && a.UserID == user.Id);
+
             await this._unitOfWork.Comments.Add(comment);
             await this._unitOfWork.Complete();
 
-            return Ok();
+            var result = this._mapper.Map<Comment, CommentDetailResource>(comment);
+
+            return Ok(result);
         }
 
         [HttpDelete]
