@@ -11,7 +11,7 @@ namespace Upico.Core.Domain
         public string UserId { set; get; }
         public string Content { set; get; }
         public DateTime DateCreate { set; get; }
-
+        public bool PrivateMode { get; set; }
         public AppUser User { set; get; }
         public IList<PostedImage> PostImages { set; get; }
         public IList<AppUser> Likes { set; get; }

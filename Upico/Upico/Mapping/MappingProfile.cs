@@ -11,7 +11,11 @@ namespace Upico.Mapping
         public MappingProfile()
         {
             CreateMap<Avatar, AvatarResource>();
-            CreateMap<AppUser, UserResource>();
+            CreateMap<AppUser, UserResource>()
+                .ForMember(ur => ur.AvatarUrl, opt => opt.MapFrom(u => u.Avatars.FirstOrDefault(a => a.IsMain).Path))
+                .ForMember(ur => ur.Followers, opt => opt.MapFrom(u => u.Followers.Count))
+                .ForMember(ur => ur.Followings, opt => opt.MapFrom(u => u.Followings.Count))
+                .ForMember(ur => ur.Posts, opt => opt.MapFrom(u => u.Posts.Count));
             CreateMap<PostedImage, PhotoResource>()
                 .ForMember(pt => pt.Url, opt => opt.MapFrom(pi => pi.Path));
             CreateMap<Post, PostResouce>();

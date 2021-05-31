@@ -61,9 +61,28 @@ namespace Upico.Persistence.Repositories
             return users;
         }
 
-        public async Task LoadMainAvatar(string userName)
+        public async Task LoadMainAvatar(string username)
         {
-            await this._context.Avatars.Where(a => a.IsMain && a.AppUser.UserName == userName).LoadAsync();
+            await this._context.Avatars.Where(a => a.IsMain && a.AppUser.UserName == username).LoadAsync();
+        }
+
+        public async Task LoadFollowing(string username)
+        {
+            var user = await this._context.Users
+                .Include(u => u.Followings)
+                .SingleOrDefaultAsync(u => u.UserName == username);
+        }
+
+        public async Task<AppUser> GetUserProfile(string username)
+        {
+            var user = await this._context.Users
+                .Include(u => u.Followings)
+                .Include(u => u.Followers)
+                .Include(u => u.Posts)
+                .Include(u => u.Avatars.Where(a => a.IsMain))
+                .SingleOrDefaultAsync(u => u.UserName == username);
+
+            return user;
         }
     }
 }

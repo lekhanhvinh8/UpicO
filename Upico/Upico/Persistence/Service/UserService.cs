@@ -142,10 +142,12 @@ namespace Upico.Persistence.Service
             if (users.Count == 1)
             {
                 if(await IsOnlyRoleUser(users[0]))
+                {
+                    await this._unitOfWork.Users.LoadMainAvatar(users[0].UserName);
 
-                await this._unitOfWork.Users.LoadMainAvatar(users[0].UserName);
+                    return users;
+                }    
 
-                return users;
             }
 
             users = await this._unitOfWork.Users.SearchUsersByDisplayName(key);
@@ -184,9 +186,16 @@ namespace Upico.Persistence.Service
             return flag;
         }
 
-        public bool IsFollow(string follower, string following)
+        public async Task<bool> IsFollowed(string followerUsername, string followingUsername)
         {
-            return false;
+            var follower = await this._unitOfWork.Users.GetUser(followerUsername);
+            var following = await this._unitOfWork.Users.GetUser(followingUsername);
+
+            await this._unitOfWork.Users.LoadFollowing(follower.UserName);
+
+            return follower.Followings.Contains(following);
         }
+
+        
     }
 }

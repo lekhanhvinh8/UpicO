@@ -7,7 +7,7 @@ namespace Upico.Core.StaticValues
 {
     public static class RoleNames
     {
-        public static string RoleAdmin = "Admin";
-        public static string RoleUser = "User";
+        public const string RoleAdmin = "Admin";
+        public const string RoleUser = "User";
     }
 }
