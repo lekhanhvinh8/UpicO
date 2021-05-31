@@ -112,6 +112,8 @@ namespace Upico.Controllers
             if (following == null)
                 return NotFound();
 
+            
+
             follower.Followings.Add(following);
             await this._unitOfWork.Complete();
 

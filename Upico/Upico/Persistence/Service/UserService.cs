@@ -159,7 +159,10 @@ namespace Upico.Persistence.Service
                 }
             }
 
-            usersRoleUser.ForEach(u => this._unitOfWork.Users.LoadMainAvatar(u.UserName));
+            foreach (var userRoleUser in usersRoleUser)
+            {
+                await this._unitOfWork.Users.LoadMainAvatar(userRoleUser.UserName);
+            }
 
 
             return usersRoleUser;
@@ -179,6 +182,11 @@ namespace Upico.Persistence.Service
             }
 
             return flag;
+        }
+
+        public bool IsFollow(string follower, string following)
+        {
+            return false;
         }
     }
 }
