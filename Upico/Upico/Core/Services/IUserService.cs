@@ -12,5 +12,6 @@ namespace Upico.Core.Services
         public Task<string> Authenticate(LoginRequest request);
         public Task<IList<string>> Register(RegisterRequest request);
         public Task<AppUser> GetUser(string userName);
+        public Task<List<AppUser>> SearchUser(string key);
     }
 }

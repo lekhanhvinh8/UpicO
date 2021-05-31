@@ -11,5 +11,9 @@ namespace Upico.Core.Repositories
     {
         public Task<AppUser> GetUser(string userName);
         public Task<AppUser> GetUserWithLikes(string userName);
+        public Task<AppUser> SearchUserByUsername(string username);
+        public Task<AppUser> SearchUserById(string id);
+        public Task<List<AppUser>> SearchUsersByDisplayName(string displayName);
+        public Task LoadMainAvatar(string userName);
     }
 }

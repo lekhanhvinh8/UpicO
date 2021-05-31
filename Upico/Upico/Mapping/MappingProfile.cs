@@ -19,7 +19,11 @@ namespace Upico.Mapping
                 .ForMember(dp => dp.Comments, opt => opt.MapFrom(p => p.Comments.Select(pf => pf.Content)))
                 .ForMember(dp => dp.Likes, opt => opt.MapFrom(p => p.Likes.Count()))
                 .ForMember(dp => dp.DisplayName, opt => opt.MapFrom(p => p.User.DisplayName))
+                .ForMember(dp => dp.Username, opt => opt.MapFrom(p => p.User.UserName))
                 .ForMember(dp => dp.AvatarUrl, opt => opt.MapFrom(p => p.User.Avatars.FirstOrDefault(a => a.IsMain).Path));
+            CreateMap<AppUser, SearchUserResource>()
+                .ForMember(dp => dp.AvatarUrl, opt => opt.MapFrom(p => p.Avatars.FirstOrDefault(a => a.IsMain).Path));
+
 
             CreateMap<Comment, CommentDetailResource>()
                 .ForMember(cr => cr.Username, opt => opt.MapFrom(c => c.User.UserName))

@@ -39,5 +39,31 @@ namespace Upico.Persistence.Repositories
 
             return user;
         }
+
+        public async Task<AppUser> SearchUserByUsername(string username)
+        {
+            var user = await this._context.Users.SingleOrDefaultAsync(u => u.UserName == username);
+            
+            return user;
+        }
+
+        public async Task<AppUser> SearchUserById(string id)
+        {
+            var user = await this._context.Users.SingleOrDefaultAsync(u => u.Id == id);
+
+            return user;
+        }
+
+        public async Task<List<AppUser>> SearchUsersByDisplayName(string displayName)
+        {
+            var users = await this._context.Users.Where(u => u.DisplayName.Contains(displayName)).ToListAsync();
+
+            return users;
+        }
+
+        public async Task LoadMainAvatar(string userName)
+        {
+            await this._context.Avatars.Where(a => a.IsMain && a.AppUser.UserName == userName).LoadAsync();
+        }
     }
 }

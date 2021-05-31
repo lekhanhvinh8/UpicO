@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Upico.Controllers.Resources;
@@ -114,6 +116,17 @@ namespace Upico.Controllers
             await this._unitOfWork.Complete();
 
             return Ok();
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> Search(string key)
+        {
+            var users = await this._userService.SearchUser(key);
+
+            var result = this._mapper.Map<IList<AppUser>, IList<SearchUserResource>>(users);
+
+            return Ok(result);
         }
     }
 }

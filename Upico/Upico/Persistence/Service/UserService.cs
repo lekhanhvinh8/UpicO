@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -9,8 +10,10 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Upico.Controllers.Resources;
+using Upico.Core;
 using Upico.Core.Domain;
 using Upico.Core.Services;
+using Upico.Core.StaticValues;
 
 namespace Upico.Persistence.Service
 {
@@ -18,12 +21,17 @@ namespace Upico.Persistence.Service
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IConfiguration _config;
 
-        public UserService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IConfiguration config)
+        public UserService(UserManager<AppUser> userManager, 
+            SignInManager<AppUser> signInManager, 
+            IUnitOfWork unitOfWork,
+            IConfiguration config)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _unitOfWork = unitOfWork;
             _config = config;
         }
 
@@ -63,7 +71,7 @@ namespace Upico.Persistence.Service
             var token = new JwtSecurityToken(_config["Tokens:Issuer"],
                 _config["Tokens:Issuer"],
                 claims,
-                expires: DateTime.Now.AddHours(3),
+                expires: DateTime.Now.AddMonths(1),
                 signingCredentials: creds);
 
             //return token
@@ -107,11 +115,70 @@ namespace Upico.Persistence.Service
                 return listError;
 
             var result = await _userManager.CreateAsync(user, request.Password);
+            await _userManager.AddToRoleAsync(user, RoleNames.RoleUser);
 
             if (result.Succeeded)
                 return null;
 
             throw new Exception("Error when creating user!! oh yeah");
+        }
+
+        public async Task<List<AppUser>> SearchUser(string key)
+        {
+            var users = new List<AppUser>();
+
+            var user = await this._unitOfWork.Users.SearchUserById(key);
+            if (user != null)
+            {
+                users.Add(user);
+            }
+
+            user = await this._unitOfWork.Users.SearchUserByUsername(key);
+            if (user != null)
+            {
+                users.Add(user);
+            }
+
+            if (users.Count == 1)
+            {
+                if(await IsOnlyRoleUser(users[0]))
+
+                await this._unitOfWork.Users.LoadMainAvatar(users[0].UserName);
+
+                return users;
+            }
+
+            users = await this._unitOfWork.Users.SearchUsersByDisplayName(key);
+
+            var usersRoleUser = new List<AppUser>();
+            foreach (var user1 in users)
+            {
+                if(await IsOnlyRoleUser(user1))
+                {
+                    usersRoleUser.Add(user1);
+                }
+            }
+
+            usersRoleUser.ForEach(u => this._unitOfWork.Users.LoadMainAvatar(u.UserName));
+
+
+            return usersRoleUser;
+        }
+
+        private async Task<bool> IsOnlyRoleUser(AppUser user)
+        {
+            //Only role User or not has any roles
+
+            var roles = await this._userManager.GetRolesAsync(user);
+
+            bool flag = true;
+            foreach (var role in roles)
+            {
+                if (role != RoleNames.RoleUser)
+                    flag = false;
+            }
+
+            return flag;
         }
     }
 }

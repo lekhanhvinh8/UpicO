@@ -9,7 +9,7 @@ namespace Upico.Controllers.Resources
     public class DetailedPostResource
     {
         public Guid Id { set; get; }
-        public string UserId { set; get; }
+        public string Username { set; get; }
         public string Content { set; get; }
         public DateTime DateCreate { set; get; }
         public string DisplayName { get; set; }

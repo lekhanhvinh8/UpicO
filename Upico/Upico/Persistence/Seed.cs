@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Upico.Core.Domain;
+using Upico.Core.StaticValues;
 
 namespace Upico.Persistence
 {
@@ -14,8 +15,8 @@ namespace Upico.Persistence
             // this seed method for creating some sample data in database
 
             //initalizing some roles
-            var roleAdmin = new IdentityRole("Admin");
-            var roleUser = new IdentityRole("User");
+            var roleAdmin = new IdentityRole(RoleNames.RoleAdmin);
+            var roleUser = new IdentityRole(RoleNames.RoleUser);
 
             await roleManager.CreateAsync(roleAdmin);
             await roleManager.CreateAsync(roleUser);

@@ -23,6 +23,8 @@ namespace Upico.Persistence.Repositories
             var post = await this._context.Posts.Include(p => p.Likes)
                                                 .Include(p => p.Comments.Where(c => c.Parent == null).Take(3))
                                                 .Include(p => p.PostImages)
+                                                .Include(p => p.User)
+                                                .Include(p => p.User.Avatars.Where(a => a.IsMain))
                                                 .SingleOrDefaultAsync(p => p.Id.ToString() == postId);
 
             return post;

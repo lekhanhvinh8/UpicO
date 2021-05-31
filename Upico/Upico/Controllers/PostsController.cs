@@ -102,7 +102,9 @@ namespace Upico.Controllers
             user.Posts.Add(post);
             await this._unitOfWork.Complete();
 
-            var result = this._mapper.Map<Post, PostResouce>(post);
+            var detailedPost = await this._unitOfWork.Posts.GetPostDetail(post.Id.ToString());
+
+            var result = this._mapper.Map<Post, DetailedPostResource>(detailedPost);
             return Ok(result);
         }
 
