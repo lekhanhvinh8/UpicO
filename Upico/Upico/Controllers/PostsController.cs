@@ -21,10 +21,13 @@ namespace Upico.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public PostsController(IUnitOfWork unitOfWork, IMapper mapper, IPhotoService photoService)
+        private readonly IUserService _userService;
+
+        public PostsController(IUnitOfWork unitOfWork, IMapper mapper, IUserService userService)
         {
             this._unitOfWork = unitOfWork;
             this._mapper = mapper;
+            this._userService = userService;
         }
 
         [HttpGet("user/{userName}")]
@@ -71,6 +74,46 @@ namespace Upico.Controllers
                 return NotFound();
 
             var posts = await this._unitOfWork.Posts.GetRelatedPostsBefore(userName, latestPostId, numPosts);
+
+            var result = this._mapper.Map<IList<Post>, IList<DetailedPostResource>>(posts);
+
+            return Ok(result);
+        }
+
+        [HttpGet("UserProfile")]
+        public async Task<IActionResult> getPosts(string sourceUsername, string targetUsername, int numPosts)
+        {
+            var sourceUser = await this._unitOfWork.Users.GetUser(sourceUsername);
+            var targetUser = await this._unitOfWork.Users.GetUser(targetUsername);
+
+            if (sourceUser == null || targetUser == null)
+                return BadRequest();
+
+            var getPrivatePost = await this._userService.IsFollowed(sourceUsername, targetUsername);
+
+            IList<Post> posts = await this._unitOfWork.Posts.GetPosts(targetUsername, getPrivatePost, numPosts);
+
+            var result = this._mapper.Map<IList<Post>, IList<DetailedPostResource>>(posts);
+
+            return Ok(result);
+        }
+
+        [HttpGet("UserProfileBefore")]
+        public async Task<IActionResult> getPostsBefore(string sourceUsername, string targetUsername, string latestPostId, int numPosts)
+        {
+            var sourceUser = await this._unitOfWork.Users.GetUser(sourceUsername);
+            var targetUser = await this._unitOfWork.Users.GetUser(targetUsername);
+
+            if (sourceUser == null || targetUser == null)
+                return BadRequest();
+
+            var latestPost = await this._unitOfWork.Posts.SingleOrDefault(p => p.Id.ToString() == latestPostId);
+            if (latestPost == null)
+                return NotFound();
+
+            var getPrivatePost = await this._userService.IsFollowed(sourceUsername, targetUsername);
+
+            IList<Post> posts = await this._unitOfWork.Posts.GetPostsBefore(targetUsername, latestPostId, getPrivatePost, numPosts);
 
             var result = this._mapper.Map<IList<Post>, IList<DetailedPostResource>>(posts);
 

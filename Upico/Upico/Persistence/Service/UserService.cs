@@ -195,7 +195,6 @@ namespace Upico.Persistence.Service
 
             return follower.Followings.Contains(following);
         }
-
         
     }
 }

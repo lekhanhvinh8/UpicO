@@ -47,10 +47,10 @@ namespace Upico.Persistence.Repositories
             var posts = await GetRelatedPosts(userName);
 
             var newPosts = await posts.OrderByDescending(p => p.DateCreate)
-                .Take(numPosts)
                 .Include(p => p.Likes)
                 .Include(p => p.Comments.Where(c => c.Parent == null).Take(3))
                 .Include(p => p.PostImages)
+                .Take(numPosts)
                 .ToListAsync();
 
             return newPosts;
@@ -64,13 +64,59 @@ namespace Upico.Persistence.Repositories
             
             var newPosts = await posts.Where(p => p.DateCreate < latestPost.DateCreate)
                 .OrderByDescending(p => p.DateCreate)
-                .Take(numPosts)
                 .Include(p => p.Likes)
                 .Include(p => p.Comments.Where(c => c.Parent == null).Take(3))
                 .Include(p => p.PostImages)
+                .Take(numPosts)
                 .ToListAsync();
 
             return newPosts;
+        }
+
+        public async Task<IList<Post>> GetPosts(string username, bool getPrivatePost, int numPosts)
+        {
+            var user = await this._context.Users
+                .Include(u => u.Avatars.Where(a => a.IsMain))
+                .SingleOrDefaultAsync(u => u.UserName == username);
+
+            var posts = await this._context.Posts
+                .Include(p => p.Likes)
+                .Include(p => p.Comments.Where(c => c.Parent == null).Take(3))
+                .Include(p => p.PostImages)
+                .Where(p => p.UserId == user.Id)
+                .OrderByDescending(p => p.DateCreate)
+                .Take(numPosts)
+                .ToListAsync();
+
+            if (!getPrivatePost)
+                posts = posts.Where(p => p.PrivateMode == false).ToList();
+
+
+            return posts;
+        }
+
+        public async Task<IList<Post>> GetPostsBefore(string username, string latestPostId, bool getPrivatePost, int numPosts)
+        {
+            var user = await this._context.Users
+                .Include(u => u.Avatars.Where(a => a.IsMain))
+                .SingleOrDefaultAsync(u => u.UserName == username);
+
+            var latestPost = await this._context.Posts.SingleOrDefaultAsync(p => p.Id.ToString() == latestPostId);
+
+            var posts = await this._context.Posts
+                .Include(p => p.Likes)
+                .Include(p => p.Comments.Where(c => c.Parent == null).Take(3))
+                .Include(p => p.PostImages)
+                .Include(p => p.User).ThenInclude(u => u.Avatars)
+                .Where(p => p.UserId == user.Id && p.DateCreate < latestPost.DateCreate)
+                .OrderByDescending(p => p.DateCreate)
+                .Take(numPosts)
+                .ToListAsync();
+
+            if (!getPrivatePost)
+                posts = posts.Where(p => p.PrivateMode == false).ToList();
+
+            return posts;
         }
     }
 }
