@@ -80,7 +80,7 @@ namespace Upico.Controllers
             return Ok(result);
         }
 
-        [HttpGet("UserProfile")]
+        [HttpGet("UserProfilePosts")]
         public async Task<IActionResult> getPosts(string sourceUsername, string targetUsername, int numPosts)
         {
             var sourceUser = await this._unitOfWork.Users.GetUser(sourceUsername);
@@ -92,13 +92,14 @@ namespace Upico.Controllers
             var getPrivatePost = await this._userService.IsFollowed(sourceUsername, targetUsername);
 
             IList<Post> posts = await this._unitOfWork.Posts.GetPosts(targetUsername, getPrivatePost, numPosts);
+            posts = posts.Where(p => p.PostImages.Count > 0).ToList();
 
             var result = this._mapper.Map<IList<Post>, IList<PostUserProfileResource>>(posts);
 
             return Ok(result);
         }
 
-        [HttpGet("UserProfileBefore")]
+        [HttpGet("MoreUserProfilePosts")]
         public async Task<IActionResult> getPostsBefore(string sourceUsername, string targetUsername, string latestPostId, int numPosts)
         {
             var sourceUser = await this._unitOfWork.Users.GetUser(sourceUsername);
@@ -114,6 +115,7 @@ namespace Upico.Controllers
             var getPrivatePost = await this._userService.IsFollowed(sourceUsername, targetUsername);
 
             IList<Post> posts = await this._unitOfWork.Posts.GetPostsBefore(targetUsername, latestPostId, getPrivatePost, numPosts);
+            posts = posts.Where(p => p.PostImages.Count > 0).ToList();
 
             var result = this._mapper.Map<IList<Post>, IList<PostUserProfileResource>>(posts);
 
