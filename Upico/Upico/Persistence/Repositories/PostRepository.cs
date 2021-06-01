@@ -76,12 +76,11 @@ namespace Upico.Persistence.Repositories
         public async Task<IList<Post>> GetPosts(string username, bool getPrivatePost, int numPosts)
         {
             var user = await this._context.Users
-                .Include(u => u.Avatars.Where(a => a.IsMain))
                 .SingleOrDefaultAsync(u => u.UserName == username);
 
             var posts = await this._context.Posts
                 .Include(p => p.Likes)
-                .Include(p => p.Comments.Where(c => c.Parent == null).Take(3))
+                .Include(p => p.Comments)
                 .Include(p => p.PostImages)
                 .Where(p => p.UserId == user.Id)
                 .OrderByDescending(p => p.DateCreate)
@@ -98,16 +97,14 @@ namespace Upico.Persistence.Repositories
         public async Task<IList<Post>> GetPostsBefore(string username, string latestPostId, bool getPrivatePost, int numPosts)
         {
             var user = await this._context.Users
-                .Include(u => u.Avatars.Where(a => a.IsMain))
                 .SingleOrDefaultAsync(u => u.UserName == username);
 
             var latestPost = await this._context.Posts.SingleOrDefaultAsync(p => p.Id.ToString() == latestPostId);
 
             var posts = await this._context.Posts
                 .Include(p => p.Likes)
-                .Include(p => p.Comments.Where(c => c.Parent == null).Take(3))
+                .Include(p => p.Comments)
                 .Include(p => p.PostImages)
-                .Include(p => p.User).ThenInclude(u => u.Avatars)
                 .Where(p => p.UserId == user.Id && p.DateCreate < latestPost.DateCreate)
                 .OrderByDescending(p => p.DateCreate)
                 .Take(numPosts)

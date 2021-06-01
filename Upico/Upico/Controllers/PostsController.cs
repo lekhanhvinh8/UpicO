@@ -93,7 +93,7 @@ namespace Upico.Controllers
 
             IList<Post> posts = await this._unitOfWork.Posts.GetPosts(targetUsername, getPrivatePost, numPosts);
 
-            var result = this._mapper.Map<IList<Post>, IList<DetailedPostResource>>(posts);
+            var result = this._mapper.Map<IList<Post>, IList<PostUserProfileResource>>(posts);
 
             return Ok(result);
         }
@@ -115,12 +115,12 @@ namespace Upico.Controllers
 
             IList<Post> posts = await this._unitOfWork.Posts.GetPostsBefore(targetUsername, latestPostId, getPrivatePost, numPosts);
 
-            var result = this._mapper.Map<IList<Post>, IList<DetailedPostResource>>(posts);
+            var result = this._mapper.Map<IList<Post>, IList<PostUserProfileResource>>(posts);
 
             return Ok(result);
         }
 
-        [HttpGet("{postId}")]
+        [HttpGet]
         public async Task<IActionResult> GetPostDetail(string postId)
         {
             var post = await this._unitOfWork.Posts.GetPostDetail(postId);

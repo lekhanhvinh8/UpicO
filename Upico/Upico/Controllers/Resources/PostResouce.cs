@@ -11,5 +11,7 @@ namespace Upico.Controllers.Resources
         public string UserId { set; get; }
         public string Content { set; get; }
         public DateTime DateCreate { set; get; }
+        public bool PrivateMode { get; set; }
+
     }
 }

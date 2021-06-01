@@ -68,7 +68,9 @@ namespace Upico.Controllers
 
             await this._unitOfWork.Complete();
 
-            return Ok();
+            var result = this._mapper.Map<IList<PostedImage>, IList<PhotoResource>>(post.PostImages);
+
+            return Ok(result);
         }
 
         [HttpDelete]
