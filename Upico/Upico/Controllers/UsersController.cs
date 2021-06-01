@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Upico.Controllers.Resources;
 using Upico.Core;
 using Upico.Core.Domain;
+using Upico.Core.ServiceResources;
 using Upico.Core.Services;
 using Upico.Core.StaticValues;
 
@@ -21,12 +22,14 @@ namespace Upico.Controllers
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMailService _mailService;
 
-        public UsersController(IUserService userService, IMapper mapper, IUnitOfWork unitOfWork)
+        public UsersController(IUserService userService, IMapper mapper, IUnitOfWork unitOfWork, IMailService mailService)
         {
             _userService = userService;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _mailService = mailService;
         }
 
         [HttpPost("authenticate")]
@@ -101,7 +104,7 @@ namespace Upico.Controllers
             return BadRequest(error);
         }
 
-        [HttpGet("{sourceUsername}/{targetUsername}")]
+        [HttpGet("follow")]
         [AllowAnonymous]
         public async Task<IActionResult> Follow(string sourceUsername, string targetUsername)
         {
@@ -117,6 +120,27 @@ namespace Upico.Controllers
                 return BadRequest();
 
             follower.Followings.Add(following);
+            await this._unitOfWork.Complete();
+
+            return Ok();
+        }
+
+        [HttpGet("unfollow")]
+        [AllowAnonymous]
+        public async Task<IActionResult> UnFollow(string sourceUsername, string targetUsername)
+        {
+            var follower = await this._unitOfWork.Users.GetUser(sourceUsername);
+            if (follower == null)
+                return NotFound();
+
+            var following = await this._unitOfWork.Users.GetUser(targetUsername);
+            if (following == null)
+                return NotFound();
+
+            if (! await this._userService.IsFollowed(follower.UserName, following.UserName))
+                return BadRequest();
+
+            follower.Followings.Remove(following);
             await this._unitOfWork.Complete();
 
             return Ok();
@@ -166,6 +190,21 @@ namespace Upico.Controllers
                 result.isFollowed = true;
 
             return Ok(result);
+        }
+
+        [HttpPost("changeEmail")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ChangeEmail([FromForm] MailRequest request)
+        {
+            try
+            {
+                await this._mailService.SendEmailAsync(request);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
     }
 }

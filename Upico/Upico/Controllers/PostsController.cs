@@ -48,24 +48,26 @@ namespace Upico.Controllers
 
         } 
 
-        [HttpGet("user/{userName}/{numPosts}")]
-        public async Task<IActionResult> GetRelatedPosts(string userName, int numPosts)
+        [HttpGet("relatedPosts")]
+        public async Task<IActionResult> GetRelatedPosts(string username, int numPosts)
         {
-            var user = await this._unitOfWork.Users.GetUser(userName);
+            var user = await this._unitOfWork.Users.GetUserWithLikes(username);
             if (user == null)
                 return NotFound();
 
-            var posts = await this._unitOfWork.Posts.GetRelatedPosts(userName, numPosts);
+            var posts = await this._unitOfWork.Posts.GetRelatedPosts(username, numPosts);
 
             var result = this._mapper.Map<IList<Post>, IList<DetailedPostResource>>(posts);
+
+            AssignIsLikeProp(user, result);
 
             return Ok(result);
         }
 
-        [HttpGet("user/{userName}/{latestPostId}/{numPosts}")]
-        public async Task<IActionResult> GetRelatedPostsBefore(string userName, string latestPostId, int numPosts)
+        [HttpGet("moreRelatedPosts")]
+        public async Task<IActionResult> GetRelatedPostsBefore(string username, string latestPostId, int numPosts)
         {
-            var user = await this._unitOfWork.Users.GetUser(userName);
+            var user = await this._unitOfWork.Users.GetUserWithLikes(username);
             if (user == null)
                 return NotFound();
 
@@ -73,9 +75,11 @@ namespace Upico.Controllers
             if (latestPost == null)
                 return NotFound();
 
-            var posts = await this._unitOfWork.Posts.GetRelatedPostsBefore(userName, latestPostId, numPosts);
+            var posts = await this._unitOfWork.Posts.GetRelatedPostsBefore(username, latestPostId, numPosts);
 
             var result = this._mapper.Map<IList<Post>, IList<DetailedPostResource>>(posts);
+
+            AssignIsLikeProp(user, result);
 
             return Ok(result);
         }
@@ -123,13 +127,20 @@ namespace Upico.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetPostDetail(string postId)
+        public async Task<IActionResult> GetPostDetail(string sourceUsername, string postId)
         {
+            var user = await this._unitOfWork.Users.GetUserWithLikes(sourceUsername);
+            if (user == null)
+                return NotFound();
+
             var post = await this._unitOfWork.Posts.GetPostDetail(postId);
             if (post == null)
                 return NotFound();
 
             var result = this._mapper.Map<Post, DetailedPostResource>(post);
+
+            if (user.Likes.Select(l => l.Id).Contains(post.Id))
+                result.IsLiked = true;
 
             return Ok(result);
         }
@@ -153,5 +164,13 @@ namespace Upico.Controllers
             return Ok(result);
         }
 
+        private void AssignIsLikeProp(AppUser sourceUser, IList<DetailedPostResource> postResources)
+        {
+            foreach (var post in postResources)
+            {
+                if (sourceUser.Likes.Select(l => l.Id).Contains(post.Id))
+                    post.IsLiked = true;
+            }
+        }
     }
 }

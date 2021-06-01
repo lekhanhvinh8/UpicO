@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Upico.Core.Services;
 using Upico.Persistence.Service;
+using Upico.Core.StaticValues;
 
 namespace Upico
 {
@@ -47,6 +48,9 @@ namespace Upico
                     });
             });
 
+            //MailService
+            services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
+
             //For identity.entityframworkcore.
             services.AddDbContext<UpicODbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("default")));
 
@@ -65,6 +69,7 @@ namespace Upico
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IPhotoService, PhotoService>();
             services.AddScoped<IPostService, PostService>();
+            services.AddScoped<IMailService, MailService>();
 
             // the context that pass to AvatarRepository and UnitOfWork in runtime is the same object.
             services.AddScoped<IAvatarRepository, AvatarRepository>();

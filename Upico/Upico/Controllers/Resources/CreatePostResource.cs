@@ -9,5 +9,6 @@ namespace Upico.Controllers.Resources
     {
         public string UserName { set; get; }
         public string Content { set; get; }
+        public bool PrivateMode { get; set; }
     }
 }

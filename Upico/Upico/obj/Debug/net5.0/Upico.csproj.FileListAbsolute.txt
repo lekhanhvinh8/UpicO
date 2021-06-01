@@ -276,3 +276,6 @@ C:\MyData\OnGoingProjects\UpicO\ServerSide\UpicO\Upico\Upico\obj\Debug\net5.0\Up
 C:\MyData\OnGoingProjects\UpicO\ServerSide\UpicO\Upico\Upico\obj\Debug\net5.0\ref\Upico.dll
 C:\MyData\OnGoingProjects\UpicO\ServerSide\UpicO\Upico\Upico\obj\Debug\net5.0\Upico.pdb
 C:\MyData\OnGoingProjects\UpicO\ServerSide\UpicO\Upico\Upico\obj\Debug\net5.0\Upico.genruntimeconfig.cache
+C:\MyData\OnGoingProjects\UpicO\ServerSide\UpicO\Upico\Upico\bin\Debug\net5.0\MailKit.dll
+C:\MyData\OnGoingProjects\UpicO\ServerSide\UpicO\Upico\Upico\bin\Debug\net5.0\MimeKit.dll
+C:\MyData\OnGoingProjects\UpicO\ServerSide\UpicO\Upico\Upico\bin\Debug\net5.0\BouncyCastle.Crypto.dll

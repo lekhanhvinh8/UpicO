@@ -12,5 +12,6 @@ namespace Upico.Core.Services
         public Task<AppUser> GetUser(string userName);
         public Task<List<AppUser>> SearchUser(string key);
         public Task<bool> IsFollowed(string followerUsername, string followingUsername);
+        public Task ChangeEmail(string username, string newEmail, string callbackurl);
     }
 }
