@@ -17,7 +17,7 @@ namespace Upico.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(Roles=RoleNames.RoleUser)]
-    public class UsersController : ControllerBase
+    public class UsersController : Controller
     {
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
@@ -245,8 +245,14 @@ namespace Upico.Controllers
             if (user == null)
                 return BadRequest("User not found");
 
-            if (updatePasswordResource.CurrentPassword == updatePasswordResource.NewPassword)
-                ModelState.AddModelError("NewPasswordConfirm", "The new password and the old password cannot be the same");
+            var currentPass = updatePasswordResource.CurrentPassword;
+            var newPass = updatePasswordResource.NewPassword;
+
+            if (!await this._userService.CheckPassword(user.UserName, currentPass))
+                return NotFound("password is incorrect");
+
+            if (currentPass == newPass)
+                ModelState.AddModelError("NewPassword", "The new password and the current password cannot be the same");
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

@@ -248,6 +248,14 @@ namespace Upico.Persistence.Service
             return result.Succeeded;
         }
 
-        //public async Task<bool> Is
+        public async Task<bool> CheckPassword(string userName, string password)
+        {
+            var user = await this._userManager.FindByNameAsync(userName);
+
+            var result = await this._userManager.CheckPasswordAsync(user, password);
+
+            return result;
+        }
+
     }
 }

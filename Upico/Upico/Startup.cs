@@ -17,6 +17,7 @@ using Microsoft.IdentityModel.Tokens;
 using Upico.Core.Services;
 using Upico.Persistence.Service;
 using Upico.Core.StaticValues;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Upico
 {
@@ -46,6 +47,12 @@ namespace Upico
                             .WithExposedHeaders("Content-Range");
 
                     });
+            });
+
+            //Disable Automatic Model State Validation
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
             });
 
             //MailService

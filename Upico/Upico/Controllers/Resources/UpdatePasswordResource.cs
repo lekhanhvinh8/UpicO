@@ -14,9 +14,10 @@ namespace Upico.Controllers.Resources
         [RegularExpression(@"(?=.*[a-z])(?=.*[A-Z])(?=.*\d)\S{6,20}", ErrorMessage = "Password is not inform")]
         public string CurrentPassword { get; set; }
 
+        [RegularExpression(@"(?=.*[a-z])(?=.*[A-Z])(?=.*\d)\S{6,20}", ErrorMessage = "New password is not inform")]
         public string NewPassword { get; set; }
 
-        //[Compare("NewPassword", ErrorMessage = "Password and confirmation password do not match")]
+        [Compare("NewPassword", ErrorMessage = "Password and confirmation password do not match")]
         public string NewPasswordConfirm { get; set; }
     }
 }
