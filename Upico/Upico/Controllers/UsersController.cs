@@ -63,9 +63,6 @@ namespace Upico.Controllers
             return Ok(userResource);
         }
         */
-        
-
-        
 
         [HttpGet("follow")]
         [AllowAnonymous]

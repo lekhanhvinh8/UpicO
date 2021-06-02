@@ -14,7 +14,7 @@ namespace Upico.Controllers.Resources
         public string FullName { set; get; }
         public string DisplayName { get; set; }
         public string Bio { get; set; }
-
+        public string PhoneNumber { get; set; }
         public int Followers { get; set; }
         public int Followings { get; set; }
         public int Posts { get; set; }
