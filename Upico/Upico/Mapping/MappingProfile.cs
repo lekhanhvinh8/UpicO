@@ -43,6 +43,9 @@ namespace Upico.Mapping
                 });
 
             CreateMap<CreatePostResource, Post>();
+            CreateMap<UpdateUserProfieResource, AppUser>()
+                .ForMember(u => u.UserName, opt => opt.Ignore())
+                .ForMember(u => u.FullName, opt => opt.MapFrom(ur => ur.FirstName + " " + ur.LastName));
         }
 
         private void MapChildren(Comment comment, CommentResouce commentResouce)

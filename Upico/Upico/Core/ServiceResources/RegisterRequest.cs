@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Upico.Controllers.Resources
+namespace Upico.Core.ServiceResources
 {
     public class RegisterRequest
     {

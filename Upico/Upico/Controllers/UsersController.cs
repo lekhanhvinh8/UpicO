@@ -44,7 +44,7 @@ namespace Upico.Controllers
             return Ok(result);
         }
 
-        
+        /*
         [HttpGet("{username}")]
         public async Task<IActionResult> GetUserByName(string username)
         {
@@ -62,47 +62,10 @@ namespace Upico.Controllers
             var userResource = this._mapper.Map<AppUser, UserResource>(result);
             return Ok(userResource);
         }
+        */
         
 
-        [HttpPost]
-        [AllowAnonymous]
-        public async Task<IActionResult> Register([FromBody] RegisterRequest user)
-        {
-            var errors = await _userService.Register(user);
-            var error = new {
-                EmailError = "Email already in use",
-                UserNameError = "Username already exists",
-            };
-
-            if (errors == null)
-            {
-                return Ok();
-            }
-            else
-            {
-                if (errors.Count == 1)
-                {
-                    if (errors[0] == "Email already in use")
-                    {
-                        error = new
-                        {
-                            EmailError = "Email already in use",
-                            UserNameError = "",
-                        };
-                    }
-                    else
-                    {
-                        error = new
-                        {
-                            EmailError = "",
-                            UserNameError = "Username already exists",
-                        };
-                    }
-                }
-            }
-
-            return BadRequest(error);
-        }
+        
 
         [HttpGet("follow")]
         [AllowAnonymous]
@@ -192,19 +155,108 @@ namespace Upico.Controllers
             return Ok(result);
         }
 
-        [HttpPost("changeEmail")]
+        [HttpGet("sendChangeEmail")]
         [AllowAnonymous]
-        public async Task<IActionResult> ChangeEmail([FromForm] MailRequest request)
+        public async Task<IActionResult> SendChangeEmailRequest(string username, string newEmail)
         {
-            try
+            var callbackurl = "http://localhost:5000/api/users/confirmChangeEmail";
+
+            await this._userService.SendChangeEmailRequest(username, newEmail, callbackurl);
+
+            return Ok();
+        }
+
+        [HttpGet("confirmChangeEmail")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ConfirmChangeEmail(string username, string newEmail, string token)
+        {
+            var user = this._unitOfWork.Users.GetUser(username);
+            if (user == null)
+                return BadRequest();
+
+            var result = await this._userService.ConfirmChangeEmail(username, newEmail, token);
+
+            if (result)
+                return Ok();
+
+            return Problem();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> Register([FromBody] RegisterRequest user)
+        {
+            var errors = await _userService.Register(user);
+            var error = new
             {
-                await this._mailService.SendEmailAsync(request);
+                EmailError = "Email already in use",
+                UserNameError = "Username already exists",
+            };
+
+            if (errors == null)
+            {
                 return Ok();
             }
-            catch (Exception ex)
+            else
             {
-                throw;
+                if (errors.Count == 1)
+                {
+                    if (errors[0] == "Email already in use")
+                    {
+                        error = new
+                        {
+                            EmailError = "Email already in use",
+                            UserNameError = "",
+                        };
+                    }
+                    else
+                    {
+                        error = new
+                        {
+                            EmailError = "",
+                            UserNameError = "Username already exists",
+                        };
+                    }
+                }
             }
+
+            return BadRequest(error);
+        }
+
+        [HttpPut("updateProfile")]
+        [AllowAnonymous]
+        public async Task<IActionResult> UpdateProfile([FromBody] UpdateUserProfieResource userProfileResource)
+        {
+            var user = await this._unitOfWork.Users.GetUser(userProfileResource.UserName);
+            if (user == null)
+                return BadRequest();
+
+            this._mapper.Map<UpdateUserProfieResource, AppUser>(userProfileResource, user);
+            await this._unitOfWork.Complete();
+
+            return Ok();
+        }
+
+        [HttpPut("changePassword")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ChangePassword([FromBody] UpdatePasswordResource updatePasswordResource)
+        {
+            var user = await this._unitOfWork.Users.GetUser(updatePasswordResource.UserName);
+            if (user == null)
+                return BadRequest("User not found");
+
+            if (updatePasswordResource.CurrentPassword == updatePasswordResource.NewPassword)
+                ModelState.AddModelError("NewPasswordConfirm", "The new password and the old password cannot be the same");
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            
+            var result = await this._userService.ChangePassword(user.UserName, updatePasswordResource.CurrentPassword, updatePasswordResource.NewPassword);
+
+            if (result == true)
+                return Ok();
+
+            return Problem();
         }
     }
 }

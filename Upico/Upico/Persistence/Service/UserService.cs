@@ -7,9 +7,10 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using Upico.Controllers.Resources;
+using System.Web;
 using Upico.Core;
 using Upico.Core.Domain;
+using Upico.Core.ServiceResources;
 using Upico.Core.Services;
 using Upico.Core.StaticValues;
 
@@ -20,16 +21,19 @@ namespace Upico.Persistence.Service
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMailService _mailService;
         private readonly IConfiguration _config;
 
         public UserService(UserManager<AppUser> userManager, 
             SignInManager<AppUser> signInManager, 
             IUnitOfWork unitOfWork,
+            IMailService mailService,
             IConfiguration config)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _unitOfWork = unitOfWork;
+            _mailService = mailService;
             _config = config;
         }
 
@@ -108,7 +112,6 @@ namespace Upico.Persistence.Service
                 FullName = request.FullName,
                 Email = request.Email
             };
-
             if (listError.Count != 0)
                 return listError;
 
@@ -194,9 +197,57 @@ namespace Upico.Persistence.Service
             return follower.Followings.Contains(following);
         }
 
-        public Task ChangeEmail(string username, string newEmail, string callbackurl)
+        public async Task SendChangeEmailRequest(string username, string newEmail, string callbackurl)
         {
-            throw new NotImplementedException();
+            var user = await this._userManager.FindByNameAsync(username);
+
+            var token = await this._userManager.GenerateChangeEmailTokenAsync(user, newEmail);
+
+            // append userId and confirmation code as parameters to the url
+            callbackurl += String.Format("?username={0}&newEmail={1}&token={2}", user.UserName, newEmail, HttpUtility.UrlEncode(token));
+
+            var htmlContent = String.Format(
+                    @"To change your email. Please confirm the email by clicking this link: 
+        <br><a href='{0}'>Confirm new email</a>",
+                    callbackurl);
+
+            // send email to the user with the confirmation link
+            MailRequest mailRequest = new MailRequest()
+            {
+                ToEmail = user.Email,
+                Subject = "Change email",
+                Body = htmlContent
+            };
+
+            try
+            {
+                await this._mailService.SendEmailAsync(mailRequest);
+
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e);
+            }
         }
+
+        public async Task<bool> ConfirmChangeEmail(string username, string newEmail, string token)
+        {
+            var user = await this._userManager.FindByNameAsync(username);
+
+            var result = await _userManager.ChangeEmailAsync(user, newEmail, token);
+
+            return result.Succeeded;
+        }
+
+        public async Task<bool> ChangePassword(string userName, string currentPassword, string newPassword)
+        {
+            var user = await this._userManager.FindByNameAsync(userName);
+
+            var result = await this._userManager.ChangePasswordAsync(user, currentPassword, newPassword);
+
+            return result.Succeeded;
+        }
+
+        //public async Task<bool> Is
     }
 }
