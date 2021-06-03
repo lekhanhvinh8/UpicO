@@ -38,7 +38,7 @@ namespace Upico.Controllers
 
             var result = this._mapper.Map<IList<Comment>, IList<CommentResouce>>(post.Comments);
 
-            return Ok(result);
+            return Ok(SortComment(result));
         }
 
         [HttpPost("comment")]
@@ -116,5 +116,11 @@ namespace Upico.Controllers
 
             return Ok();
         }
-    }
+
+        private IList<CommentResouce> SortComment(IList<CommentResouce> comments)
+        {
+            return comments.OrderByDescending(c => c.Childs.Count).ToList();
+        }
+
+}
 }

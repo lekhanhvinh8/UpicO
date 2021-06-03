@@ -50,18 +50,15 @@ namespace Upico.Persistence.Repositories
 
         private void RemoveAllChildren(Comment comment)
         {
-            var removeComments = new List<Comment>();
-
             foreach (var child in comment.Childs)
             {
-                if (child.Childs.Count == 0)
-                    removeComments.Add(child);
-                else
+                if (child.Childs.Count != 0)
+                {
                     RemoveAllChildren(child);
+                }
             }
 
-            comment.Childs.Clear();
-            this._context.Comments.RemoveRange(removeComments);
+            this._context.Comments.RemoveRange(comment.Childs);
         }
     }
 }

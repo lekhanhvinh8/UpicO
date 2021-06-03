@@ -164,6 +164,45 @@ namespace Upico.Controllers
             return Ok(result);
         }
 
+        [HttpPut]
+        public async Task<IActionResult> UpdatePrivateMode(string postId, bool privateMode)
+        {
+            var post = await this._unitOfWork.Posts.SingleOrDefault(p => p.Id.ToString() == postId);
+            if (post == null)
+                return BadRequest();
+
+            post.PrivateMode = privateMode;
+
+            await this._unitOfWork.Complete();
+
+            return Ok();
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeletePost(string postId)
+        {
+            var post = await this._unitOfWork.Posts.GetPostDetail(postId);
+            if (post == null)
+                return NotFound();
+
+            if (post.PostImages.Count != 0)
+                return BadRequest();
+
+            foreach (var comment in post.Comments)
+            {
+                this._unitOfWork.Comments.RemoveAllChildren(comment.Id.ToString());
+                this._unitOfWork.Comments.Remove(comment);
+            }
+
+            post.Likes.Clear();
+
+            this._unitOfWork.Posts.Remove(post);
+
+            await this._unitOfWork.Complete();
+
+            return Ok();
+        }
+
         private void AssignIsLikeProp(AppUser sourceUser, IList<DetailedPostResource> postResources)
         {
             foreach (var post in postResources)
