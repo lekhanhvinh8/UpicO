@@ -109,7 +109,7 @@ namespace Upico.Controllers
             var comment = await this._unitOfWork.Comments.SingleOrDefault(c => c.Id.ToString() == commentId);
             if (comment == null)
                 return BadRequest();
-
+            
             this._unitOfWork.Comments.RemoveAllChildren(commentId);
             this._unitOfWork.Comments.Remove(comment);
             await this._unitOfWork.Complete();

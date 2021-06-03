@@ -87,11 +87,30 @@ namespace Upico.Persistence.Repositories
                 .Take(numPosts)
                 .ToListAsync();
 
+            if (posts.Count == 0)
+                return posts;
+
+            IList<Post> filterPosts = new List<Post>(posts);
+
             if (!getPrivatePost)
-                posts = posts.Where(p => p.PrivateMode == false).ToList();
+                filterPosts = posts.Where(p => p.PrivateMode == false).ToList();
 
+            filterPosts = filterPosts.Where(p => p.PostImages.Count > 0).ToList();
 
-            return posts;
+            if(filterPosts.Count < numPosts)
+            {
+                var additionalPosts = await GetPostsBefore(username,
+                    posts.LastOrDefault().Id.ToString(),
+                    getPrivatePost,
+                    numPosts - filterPosts.Count);
+
+                foreach (var post in additionalPosts)
+                {
+                    filterPosts.Add(post);
+                }
+            }    
+
+            return filterPosts;
         }
 
         public async Task<IList<Post>> GetPostsBefore(string username, string latestPostId, bool getPrivatePost, int numPosts)
@@ -110,10 +129,30 @@ namespace Upico.Persistence.Repositories
                 .Take(numPosts)
                 .ToListAsync();
 
-            if (!getPrivatePost)
-                posts = posts.Where(p => p.PrivateMode == false).ToList();
+            if (posts.Count == 0)
+                return posts;
 
-            return posts;
+            IList<Post> filterPosts = new List<Post>(posts);
+
+            if (!getPrivatePost)
+                filterPosts = posts.Where(p => p.PrivateMode == false).ToList();
+
+            filterPosts = filterPosts.Where(p => p.PostImages.Count > 0).ToList();
+
+            if (filterPosts.Count < numPosts)
+            {
+                var additionalPosts = await this.GetPostsBefore(username, 
+                    posts.LastOrDefault().Id.ToString(), 
+                    getPrivatePost, 
+                    numPosts - filterPosts.Count);
+
+                foreach (var post in additionalPosts)
+                {
+                    filterPosts.Add(post);
+                }
+            }
+
+            return filterPosts;
         }
     }
 }

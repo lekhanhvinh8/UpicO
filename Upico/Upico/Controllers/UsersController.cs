@@ -167,7 +167,7 @@ namespace Upico.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> ConfirmChangeEmail(string username, string newEmail, string token)
         {
-            var user = this._unitOfWork.Users.GetUser(username);
+            var user = await this._unitOfWork.Users.GetUser(username);
             if (user == null)
                 return BadRequest();
 

@@ -95,8 +95,10 @@ namespace Upico.Controllers
 
             var getPrivatePost = await this._userService.IsFollowed(sourceUsername, targetUsername);
 
+            if (sourceUsername == targetUsername)
+                getPrivatePost = true;
+
             IList<Post> posts = await this._unitOfWork.Posts.GetPosts(targetUsername, getPrivatePost, numPosts);
-            posts = posts.Where(p => p.PostImages.Count > 0).ToList();
 
             var result = this._mapper.Map<IList<Post>, IList<PostUserProfileResource>>(posts);
 
@@ -118,8 +120,10 @@ namespace Upico.Controllers
 
             var getPrivatePost = await this._userService.IsFollowed(sourceUsername, targetUsername);
 
+            if (sourceUsername == targetUsername)
+                getPrivatePost = true;
+
             IList<Post> posts = await this._unitOfWork.Posts.GetPostsBefore(targetUsername, latestPostId, getPrivatePost, numPosts);
-            posts = posts.Where(p => p.PostImages.Count > 0).ToList();
 
             var result = this._mapper.Map<IList<Post>, IList<PostUserProfileResource>>(posts);
 
