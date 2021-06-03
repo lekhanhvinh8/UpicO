@@ -36,12 +36,12 @@ namespace Upico.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Authenticate([FromBody] LoginRequest request)
         {
-            var result = await _userService.Authenticate(request);
+            var response = await _userService.Authenticate(request);
 
-            if (string.IsNullOrEmpty(result))
+            if (response == null)
                 return BadRequest("Tài khoản hoặc mật khẩu không chính xác");
 
-            return Ok(result);
+            return Ok(response);
         }
 
         /*

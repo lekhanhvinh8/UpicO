@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -37,7 +38,7 @@ namespace Upico.Persistence.Service
             _config = config;
         }
 
-        public async Task<string> Authenticate(LoginRequest request)
+        public async Task<LoginResponse> Authenticate(LoginRequest request)
         {
             // check user exitst
             var user = await _userManager.FindByNameAsync(request.Username);
@@ -56,6 +57,7 @@ namespace Upico.Persistence.Service
             if (fullName == null)
                 fullName = "undefined";
             //create claims
+            
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Email,user.Email),
@@ -66,10 +68,36 @@ namespace Upico.Persistence.Service
             {
                 claims.Add(new Claim(ClaimTypes.Role, i));
             }
-
+            
             //create token
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity((claims)),
+                Expires = DateTime.Now.AddMonths(2),
+                SigningCredentials = creds,
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+
+            var finalToken = tokenHandler.WriteToken(token);
+
+            //Load Avatar
+            await this._unitOfWork.Avatars.Load(a => a.UserID == user.Id && a.IsMain);
+
+            var loginResponse = new LoginResponse()
+            {
+                UserName = user.UserName,
+                Token = finalToken,
+                DisplayName = user.DisplayName,
+                AvatarUrl = user.Avatars.Where(a => a.IsMain).FirstOrDefault().Path
+            };
+
+            return loginResponse;
+            /*
             var token = new JwtSecurityToken(_config["Tokens:Issuer"],
                 _config["Tokens:Issuer"],
                 claims,
@@ -78,6 +106,7 @@ namespace Upico.Persistence.Service
 
             //return token
             return new JwtSecurityTokenHandler().WriteToken(token);
+            */
         }
 
         public async Task<AppUser> GetUser(string userName)
