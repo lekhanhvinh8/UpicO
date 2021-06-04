@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -91,6 +92,9 @@ namespace Upico.Persistence.Repositories
             return user;
         }
 
-        
+        public async Task Load(Expression<Func<AppUser, bool>> predicate)
+        {
+            await this._context.Users.Where(predicate).LoadAsync();
+        }
     }
 }

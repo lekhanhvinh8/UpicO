@@ -227,7 +227,7 @@ namespace Upico.Persistence.Service
             var follower = await this._unitOfWork.Users.GetUser(followerUsername);
             var following = await this._unitOfWork.Users.GetUser(followingUsername);
 
-            await this._unitOfWork.Users.LoadFollowers(follower.UserName);
+            await this._unitOfWork.Users.LoadFollowings(follower.UserName);
 
             return follower.Followings.Contains(following);
         }

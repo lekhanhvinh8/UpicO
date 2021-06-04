@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Upico.Controllers.Resources;
 using Upico.Core.Domain;
@@ -18,5 +19,6 @@ namespace Upico.Core.Repositories
         public Task LoadFollowings(string username);
         public Task LoadFollowers(string username);
         public Task<AppUser> GetUserProfile(string username);
+        Task Load(Expression<Func<AppUser, bool>> predicate);
     }
 }

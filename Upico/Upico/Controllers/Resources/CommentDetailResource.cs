@@ -13,5 +13,6 @@ namespace Upico.Controllers.Resources
         public string UserAvatarUrl { get; set; }
         public string Content { set; get; }
         public DateTime DateCreate { set; get; }
+        public int Replies { get; set; }
     }
 }

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Upico.Controllers.Resources;
 using Upico.Core;
 using Upico.Core.Domain;
+using Upico.Core.Services;
 
 namespace Upico.Controllers
 {
@@ -16,11 +17,13 @@ namespace Upico.Controllers
     public class CommentsController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ICommentService _commentService;
         private readonly IMapper _mapper;
 
-        public CommentsController(IUnitOfWork unitOfWork, IMapper mapper)
+        public CommentsController(IUnitOfWork unitOfWork, ICommentService commentService, IMapper mapper)
         {
             this._unitOfWork = unitOfWork;
+            this._commentService = commentService;
             this._mapper = mapper;
         }
 
@@ -28,6 +31,8 @@ namespace Upico.Controllers
         public async Task<IActionResult> GetAll(string postId)
         {
             var post = await this._unitOfWork.Posts.SingleOrDefault(p => p.Id.ToString() == postId);
+            if (post == null)
+                return BadRequest();
 
             await this._unitOfWork.Comments.Load(c => c.PostId == post.Id);
 
@@ -39,6 +44,20 @@ namespace Upico.Controllers
             var result = this._mapper.Map<IList<Comment>, IList<CommentResouce>>(post.Comments);
 
             return Ok(SortComment(result));
+        }
+
+        [HttpGet("parents")]
+        public async Task<IActionResult> GetParents(string postId, string lastCommentId, int numComments)
+        {
+            var post = await this._unitOfWork.Posts.SingleOrDefault(p => p.Id.ToString() == postId);
+            if (post == null)
+                return BadRequest();
+
+            var comments = await this._commentService.GetParentComments(postId, lastCommentId, numComments);
+
+            var result = this._mapper.Map<IList<Comment>, IList<CommentDetailResource>>(comments);
+            
+            return Ok(result);
         }
 
         [HttpPost("comment")]

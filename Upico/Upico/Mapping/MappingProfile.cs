@@ -36,6 +36,7 @@ namespace Upico.Mapping
             CreateMap<Comment, CommentDetailResource>()
                 .ForMember(cr => cr.Username, opt => opt.MapFrom(c => c.User.UserName))
                 .ForMember(cr => cr.UserDisplayName, opt => opt.MapFrom(c => c.User.DisplayName))
+                .ForMember(cr => cr.Replies, opt => opt.MapFrom(c => c.Childs.Count()))
                 .ForMember(cr => cr.UserAvatarUrl, opt => opt.MapFrom(c => c.User.Avatars.FirstOrDefault(a => a.IsMain) != null ? c.User.Avatars.FirstOrDefault(a => a.IsMain).Path : null));
             CreateMap<Comment, CommentResouce>()
                 .ForMember(cr => cr.Childs, opt => opt.Ignore())

@@ -16,37 +16,68 @@ namespace Upico.Persistence.Service
         {
             this._unitOfWork = unitOfWork;
         }
-        public Task<IList<Comment>> GetParentComments(string postId, int numComments)
+        public async Task<IList<Comment>> GetParentComments(string postId, string lastCommentId, int numComments)
         {
+            var post = await this._unitOfWork.Posts.SingleOrDefault(p => p.Id.ToString() == postId);
 
-            //var post 
+            Comment lastComment = null;
 
+            if (lastCommentId != null)
+            {
+                lastComment = await this._unitOfWork.Comments.SingleOrDefault(c => c.Id.ToString() == lastCommentId);
+                await this._unitOfWork.Comments.Load(c => c.ParentId == lastComment.Id);
+            }
 
+            await this._unitOfWork.Comments.Load(c => c.PostId == post.Id);
+            foreach (var comment in post.Comments)
+            {
+                await this._unitOfWork.Users.Load(u => u.Id == comment.UserId);
+                await this._unitOfWork.Users.LoadMainAvatar(comment.User.UserName);
 
-            throw new NotImplementedException();
-        }
-        public Task<IList<Comment>> GetMoreParentComments(string postId, string lastCommentId, int numComments)
-        {
-            throw new NotImplementedException();
+                await this._unitOfWork.Comments.Load(c => c.ParentId == comment.Id);
+            }
+
+            var comments = post.Comments.ToList();
+
+            comments = comments.OrderByDescending(c => c, new ComparerComment(_unitOfWork)).ToList();
+
+            if(lastComment != null)
+                comments = comments.Where(c => new ComparerComment(_unitOfWork).Compare(c, lastComment) < 0).Take(numComments).ToList();
+            else
+                comments = comments.Take(numComments).ToList();
+
+            return comments;
         }
         
 
-        public Task<IList<Comment>> GetChidrennComments(string parentId, int numComments)
+        public Task<IList<Comment>> GetChidrenComments(string parentId, string lastCommentId, int numComments)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal class ComparerComment : IComparer<Comment>
         {
            
+            private readonly IUnitOfWork _unitOfWork;
 
+            public ComparerComment(IUnitOfWork unitOfWork)
+            {
+                this._unitOfWork = unitOfWork;
+            }
+            public int Compare(Comment x, Comment y)
+            {
+                var days = x.DateCreate - y.DateCreate;
 
+                var replies = x.Childs.Count() - y.Childs.Count();
 
+                if ((days.Days * (3) + replies) > 0)
+                    return 1;
 
+                if ((days.Days * (3) + replies) < 0)
+                    return -1;
 
-            throw new NotImplementedException();
+                return 0;
+            }
         }
-
-        public Task<IList<Comment>> GetMoreChidrennComments(string parentId, string lastCommentId, int numComments)
-        {
-            throw new NotImplementedException();
-        }
-
-        
     }
 }
