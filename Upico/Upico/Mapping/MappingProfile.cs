@@ -16,6 +16,8 @@ namespace Upico.Mapping
                 .ForMember(ur => ur.Followers, opt => opt.MapFrom(u => u.Followers.Count))
                 .ForMember(ur => ur.Followings, opt => opt.MapFrom(u => u.Followings.Count))
                 .ForMember(ur => ur.Posts, opt => opt.MapFrom(u => u.Posts.Count));
+            CreateMap<AppUser, LightweightUserResource>()
+                .ForMember(lr => lr.AvatarUrl, opt => opt.MapFrom(u => u.Avatars.FirstOrDefault(a => a.IsMain) != null ? u.Avatars.FirstOrDefault(a => a.IsMain).Path : null));
             CreateMap<PostedImage, PhotoResource>()
                 .ForMember(pt => pt.Url, opt => opt.MapFrom(pi => pi.Path));
             CreateMap<Post, PostResouce>();
@@ -30,7 +32,6 @@ namespace Upico.Mapping
                 .ForMember(dp => dp.AvatarUrl, opt => opt.MapFrom(p => p.User.Avatars.FirstOrDefault(a => a.IsMain) != null ? p.User.Avatars.FirstOrDefault(a => a.IsMain).Path : null));
             CreateMap<AppUser, SearchUserResource>()
                 .ForMember(dp => dp.AvatarUrl, opt => opt.MapFrom(p => p.Avatars.FirstOrDefault(a => a.IsMain) != null ? p.Avatars.FirstOrDefault(a => a.IsMain).Path : null));
-
 
             CreateMap<Comment, CommentDetailResource>()
                 .ForMember(cr => cr.Username, opt => opt.MapFrom(c => c.User.UserName))
@@ -47,7 +48,6 @@ namespace Upico.Mapping
                 .ForMember(u => u.UserName, opt => opt.Ignore())
                 .ForMember(u => u.FullName, opt => opt.MapFrom(ur => ur.FirstName + " " + ur.LastName));
         }
-
         private void MapChildren(Comment comment, CommentResouce commentResouce)
         {
             //basic mapping

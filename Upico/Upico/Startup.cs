@@ -34,8 +34,6 @@ namespace Upico
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-
             services.AddCors(options => {
 
                 options.AddPolicy(name: _myAllowSpecificOrigins,
@@ -133,6 +131,8 @@ namespace Upico
 
             var key = new SymmetricSecurityKey(signingKeyBytes);
 
+
+            /*
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(opt =>
                 {
@@ -144,7 +144,24 @@ namespace Upico
                         ValidateAudience = false
                     };
                 });
+            */
 
+
+            services.AddAuthentication(opt => {
+                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(opt =>
+                {
+                    opt.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = key,
+                        ValidateIssuer = false,
+                        ValidateAudience = false
+                    };
+                });
+            
             /*
             services.AddAuthentication(options =>
             {
@@ -169,7 +186,6 @@ namespace Upico
                 };
             });
             */
-
 
         }
 

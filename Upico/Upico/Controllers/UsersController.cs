@@ -190,7 +190,14 @@ namespace Upico.Controllers
 
             var suggesstionFollowing = await this._userService.GetFollowingSuggestion(user.UserName, numFollowings);
 
-            return Ok(suggesstionFollowing.Select(s => s.UserName));
+            foreach (var following in suggesstionFollowing)
+            {
+                await this._unitOfWork.Users.LoadMainAvatar(following.UserName);
+            }
+
+            var result = this._mapper.Map<IList<AppUser>, IList<LightweightUserResource>>(suggesstionFollowing);
+
+            return Ok(result);
         }
 
         [HttpPost]
