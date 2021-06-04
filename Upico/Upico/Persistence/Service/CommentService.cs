@@ -73,10 +73,10 @@ namespace Upico.Persistence.Service
 
             var comments = rootComment.Childs.ToList();
 
-            comments = comments.OrderByDescending(c => c, new ComparerComment(_unitOfWork)).ToList();
+            comments = comments.OrderBy(c => c.DateCreate).ToList();
 
             if (lastComment != null)
-                comments = comments.Where(c => new ComparerComment(_unitOfWork).Compare(c, lastComment) < 0).Take(numComments).ToList();
+                comments = comments.Where(c => c.DateCreate > rootComment.DateCreate).Take(numComments).ToList();
             else
                 comments = comments.Take(numComments).ToList();
 

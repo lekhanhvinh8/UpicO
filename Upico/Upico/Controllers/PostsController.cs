@@ -85,7 +85,7 @@ namespace Upico.Controllers
         }
 
         [HttpGet("UserProfilePosts")]
-        public async Task<IActionResult> getPosts(string sourceUsername, string targetUsername, int numPosts)
+        public async Task<IActionResult> getPosts(string sourceUsername, string targetUsername, int numPosts, bool getImages = true)
         {
             var sourceUser = await this._unitOfWork.Users.GetUser(sourceUsername);
             var targetUser = await this._unitOfWork.Users.GetUser(targetUsername);
@@ -98,7 +98,7 @@ namespace Upico.Controllers
             if (sourceUsername == targetUsername)
                 getPrivatePost = true;
 
-            IList<Post> posts = await this._unitOfWork.Posts.GetPosts(targetUsername, getPrivatePost, numPosts);
+            IList<Post> posts = await this._unitOfWork.Posts.GetPosts(targetUsername, getPrivatePost, numPosts, getImages);
 
             var result = this._mapper.Map<IList<Post>, IList<PostUserProfileResource>>(posts);
 
@@ -106,7 +106,7 @@ namespace Upico.Controllers
         }
 
         [HttpGet("MoreUserProfilePosts")]
-        public async Task<IActionResult> getPostsBefore(string sourceUsername, string targetUsername, string latestPostId, int numPosts)
+        public async Task<IActionResult> getPostsBefore(string sourceUsername, string targetUsername, string latestPostId, int numPosts, bool getImages = true)
         {
             var sourceUser = await this._unitOfWork.Users.GetUser(sourceUsername);
             var targetUser = await this._unitOfWork.Users.GetUser(targetUsername);
@@ -123,7 +123,7 @@ namespace Upico.Controllers
             if (sourceUsername == targetUsername)
                 getPrivatePost = true;
 
-            IList<Post> posts = await this._unitOfWork.Posts.GetPostsBefore(targetUsername, latestPostId, getPrivatePost, numPosts);
+            IList<Post> posts = await this._unitOfWork.Posts.GetPostsBefore(targetUsername, latestPostId, getPrivatePost, numPosts, getImages);
 
             var result = this._mapper.Map<IList<Post>, IList<PostUserProfileResource>>(posts);
 

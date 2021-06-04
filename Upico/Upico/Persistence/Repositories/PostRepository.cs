@@ -73,7 +73,7 @@ namespace Upico.Persistence.Repositories
             return newPosts;
         }
 
-        public async Task<IList<Post>> GetPosts(string username, bool getPrivatePost, int numPosts)
+        public async Task<IList<Post>> GetPosts(string username, bool getPrivatePost, int numPosts, bool getImages)
         {
             var user = await this._context.Users
                 .SingleOrDefaultAsync(u => u.UserName == username);
@@ -95,14 +95,19 @@ namespace Upico.Persistence.Repositories
             if (!getPrivatePost)
                 filterPosts = posts.Where(p => p.PrivateMode == false).ToList();
 
-            filterPosts = filterPosts.Where(p => p.PostImages.Count > 0).ToList();
+            if(getImages)
+                filterPosts = filterPosts.Where(p => p.PostImages.Count > 0).ToList();
+            else
+                filterPosts = filterPosts.Where(p => p.PostImages.Count == 0).ToList();
 
-            if(filterPosts.Count < numPosts)
+
+            if (filterPosts.Count < numPosts)
             {
                 var additionalPosts = await GetPostsBefore(username,
                     posts.LastOrDefault().Id.ToString(),
                     getPrivatePost,
-                    numPosts - filterPosts.Count);
+                    numPosts - filterPosts.Count,
+                    getImages);
 
                 foreach (var post in additionalPosts)
                 {
@@ -113,7 +118,7 @@ namespace Upico.Persistence.Repositories
             return filterPosts;
         }
 
-        public async Task<IList<Post>> GetPostsBefore(string username, string latestPostId, bool getPrivatePost, int numPosts)
+        public async Task<IList<Post>> GetPostsBefore(string username, string latestPostId, bool getPrivatePost, int numPosts, bool getImages)
         {
             var user = await this._context.Users
                 .SingleOrDefaultAsync(u => u.UserName == username);
@@ -137,14 +142,18 @@ namespace Upico.Persistence.Repositories
             if (!getPrivatePost)
                 filterPosts = posts.Where(p => p.PrivateMode == false).ToList();
 
-            filterPosts = filterPosts.Where(p => p.PostImages.Count > 0).ToList();
+            if(getImages)
+                filterPosts = filterPosts.Where(p => p.PostImages.Count > 0).ToList();
+            else
+                filterPosts = filterPosts.Where(p => p.PostImages.Count == 0).ToList();
 
             if (filterPosts.Count < numPosts)
             {
                 var additionalPosts = await this.GetPostsBefore(username, 
                     posts.LastOrDefault().Id.ToString(), 
                     getPrivatePost, 
-                    numPosts - filterPosts.Count);
+                    numPosts - filterPosts.Count,
+                    getImages);
 
                 foreach (var post in additionalPosts)
                 {

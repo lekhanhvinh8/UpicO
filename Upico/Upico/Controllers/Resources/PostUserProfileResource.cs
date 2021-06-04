@@ -12,5 +12,6 @@ namespace Upico.Controllers.Resources
         public IList<PhotoResource> PostImages{ get; set; }
         public int Comments { get; set; }
         public int Likes { get; set; }
+        public string Content { set; get; }
     }
 }
