@@ -16,5 +16,6 @@ namespace Upico.Core.Services
         public Task<bool> ConfirmChangeEmail(string username, string newEmail, string token);
         public Task<bool> ChangePassword(string userName, string currentPassword, string newPassword);
         public Task<bool> CheckPassword(string userName, string password);
+        public Task<IList<AppUser>> GetFollowingSuggestion(string userName, int numFollowings);
     }
 }

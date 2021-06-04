@@ -221,7 +221,7 @@ namespace Upico.Persistence.Service
             var follower = await this._unitOfWork.Users.GetUser(followerUsername);
             var following = await this._unitOfWork.Users.GetUser(followingUsername);
 
-            await this._unitOfWork.Users.LoadFollowing(follower.UserName);
+            await this._unitOfWork.Users.LoadFollowers(follower.UserName);
 
             return follower.Followings.Contains(following);
         }
@@ -284,6 +284,76 @@ namespace Upico.Persistence.Service
             var result = await this._userManager.CheckPasswordAsync(user, password);
 
             return result;
+        }
+
+        public async Task<IList<AppUser>> GetFollowingSuggestion(string userName, int numFollowings)
+        {
+            var user = await this._unitOfWork.Users.GetUser(userName);
+
+            await this._unitOfWork.Users.LoadFollowings(user.UserName);
+
+            foreach (var following in user.Followings)
+            {
+                await this._unitOfWork.Users.LoadFollowings(following.UserName);
+            }
+
+            var successors = user.Followings.SelectMany(f => f.Followings).Distinct().ToList();
+
+            successors = successors.Where(s => s.UserName != user.UserName && !user.Followings.Select(f => f.UserName).Contains(s.UserName)).ToList();
+
+            successors = successors.OrderByDescending(s => s, new CompareFollowing(user, _unitOfWork)).Take(numFollowings * 2).ToList();
+
+            return successors.OrderBy(s => Guid.NewGuid()).Take(numFollowings).ToList();
+        }
+
+        internal class CompareFollowing : IComparer<AppUser>
+        {
+            private readonly AppUser _sourceUser;
+            private readonly IUnitOfWork _unitOfWork;
+
+            public CompareFollowing(AppUser sourceUser, IUnitOfWork unitOfWork)
+            {
+                this._sourceUser = sourceUser;
+                this._unitOfWork = unitOfWork;
+            }
+            //SortBySalaryByAscendingOrder
+            public int Compare(AppUser x, AppUser y)
+            {
+                //Load Followers of user x
+                var asyncMethod = this._unitOfWork.Users.LoadFollowers(x.UserName);
+                asyncMethod.Wait();
+
+                //Load Followers of user y
+                asyncMethod = this._unitOfWork.Users.LoadFollowers(y.UserName);
+                asyncMethod.Wait();
+
+                //Load Followings of source user
+                asyncMethod = this._unitOfWork.Users.LoadFollowings(_sourceUser.UserName);
+                asyncMethod.Wait();
+
+                int scoreUserX = 0;
+                int scoreUserY = 0;
+
+                foreach (var user in _sourceUser.Followings)
+                {
+                    var followings = user.Followings.Select(u => u.UserName);
+
+                    if (followings.Contains(x.UserName))
+                        scoreUserX++;
+                    if (followings.Contains(y.UserName))
+                        scoreUserY++;
+                }
+
+                if (scoreUserX > scoreUserY)
+                    return 1;
+
+                if (scoreUserX < scoreUserY)
+                    return -1;
+
+                return 0;
+            }
+
+            
         }
 
     }

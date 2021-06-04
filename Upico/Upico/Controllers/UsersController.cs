@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Upico.Controllers.Resources;
@@ -177,6 +178,19 @@ namespace Upico.Controllers
                 return Ok();
 
             return Problem();
+        }
+
+        [HttpGet("followingSuggestion")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetFollowingSuggestion(string userName, int numFollowings)
+        {
+            var user = await this._unitOfWork.Users.GetUser(userName);
+            if (user == null)
+                return BadRequest();
+
+            var suggesstionFollowing = await this._userService.GetFollowingSuggestion(user.UserName, numFollowings);
+
+            return Ok(suggesstionFollowing.Select(s => s.UserName));
         }
 
         [HttpPost]

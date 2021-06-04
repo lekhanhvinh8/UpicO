@@ -66,10 +66,16 @@ namespace Upico.Persistence.Repositories
             await this._context.Avatars.Where(a => a.IsMain && a.AppUser.UserName == username).LoadAsync();
         }
 
-        public async Task LoadFollowing(string username)
+        public async Task LoadFollowings(string username)
         {
             var user = await this._context.Users
                 .Include(u => u.Followings)
+                .SingleOrDefaultAsync(u => u.UserName == username);
+        }
+        public async Task LoadFollowers(string username)
+        {
+            var user = await this._context.Users
+                .Include(u => u.Followers)
                 .SingleOrDefaultAsync(u => u.UserName == username);
         }
 
@@ -84,5 +90,7 @@ namespace Upico.Persistence.Repositories
 
             return user;
         }
+
+        
     }
 }
