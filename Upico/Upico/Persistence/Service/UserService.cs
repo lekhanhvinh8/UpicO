@@ -88,12 +88,18 @@ namespace Upico.Persistence.Service
             //Load Avatar
             await this._unitOfWork.Avatars.Load(a => a.UserID == user.Id && a.IsMain);
 
+            var avatar = user.Avatars.Where(a => a.IsMain).FirstOrDefault();
+            string path = null;
+
+            if (avatar != null)
+                path = avatar.Path;
+
             var loginResponse = new LoginResponse()
             {
                 UserName = user.UserName,
                 Token = finalToken,
                 DisplayName = user.DisplayName,
-                AvatarUrl = user.Avatars.Where(a => a.IsMain).FirstOrDefault().Path
+                AvatarUrl = path
             };
 
             return loginResponse;

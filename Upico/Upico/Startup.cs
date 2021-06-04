@@ -77,6 +77,7 @@ namespace Upico
             services.AddScoped<IPhotoService, PhotoService>();
             services.AddScoped<IPostService, PostService>();
             services.AddScoped<IMailService, MailService>();
+            services.AddScoped<ICommentService, CommentService>();
 
             // the context that pass to AvatarRepository and UnitOfWork in runtime is the same object.
             services.AddScoped<IAvatarRepository, AvatarRepository>();

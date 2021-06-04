@@ -12,7 +12,7 @@ namespace Upico.Mapping
         {
             CreateMap<Avatar, AvatarResource>();
             CreateMap<AppUser, UserResource>()
-                .ForMember(ur => ur.AvatarUrl, opt => opt.MapFrom(u => u.Avatars.FirstOrDefault(a => a.IsMain).Path))
+                .ForMember(ur => ur.AvatarUrl, opt => opt.MapFrom(u => u.Avatars.FirstOrDefault(a => a.IsMain) != null ? u.Avatars.FirstOrDefault(a => a.IsMain).Path : null))
                 .ForMember(ur => ur.Followers, opt => opt.MapFrom(u => u.Followers.Count))
                 .ForMember(ur => ur.Followings, opt => opt.MapFrom(u => u.Followings.Count))
                 .ForMember(ur => ur.Posts, opt => opt.MapFrom(u => u.Posts.Count));
@@ -27,15 +27,15 @@ namespace Upico.Mapping
                 .ForMember(dp => dp.Likes, opt => opt.MapFrom(p => p.Likes.Count()))
                 .ForMember(dp => dp.DisplayName, opt => opt.MapFrom(p => p.User.DisplayName))
                 .ForMember(dp => dp.Username, opt => opt.MapFrom(p => p.User.UserName))
-                .ForMember(dp => dp.AvatarUrl, opt => opt.MapFrom(p => p.User.Avatars.FirstOrDefault(a => a.IsMain).Path));
+                .ForMember(dp => dp.AvatarUrl, opt => opt.MapFrom(p => p.User.Avatars.FirstOrDefault(a => a.IsMain) != null ? p.User.Avatars.FirstOrDefault(a => a.IsMain).Path : null));
             CreateMap<AppUser, SearchUserResource>()
-                .ForMember(dp => dp.AvatarUrl, opt => opt.MapFrom(p => p.Avatars.FirstOrDefault(a => a.IsMain).Path));
+                .ForMember(dp => dp.AvatarUrl, opt => opt.MapFrom(p => p.Avatars.FirstOrDefault(a => a.IsMain) != null ? p.Avatars.FirstOrDefault(a => a.IsMain).Path : null));
 
 
             CreateMap<Comment, CommentDetailResource>()
                 .ForMember(cr => cr.Username, opt => opt.MapFrom(c => c.User.UserName))
                 .ForMember(cr => cr.UserDisplayName, opt => opt.MapFrom(c => c.User.DisplayName))
-                .ForMember(cr => cr.UserAvatarUrl, opt => opt.MapFrom(c => c.User.Avatars.FirstOrDefault(a => a.IsMain).Path));
+                .ForMember(cr => cr.UserAvatarUrl, opt => opt.MapFrom(c => c.User.Avatars.FirstOrDefault(a => a.IsMain) != null ? c.User.Avatars.FirstOrDefault(a => a.IsMain).Path : null));
             CreateMap<Comment, CommentResouce>()
                 .ForMember(cr => cr.Childs, opt => opt.Ignore())
                 .AfterMap((c, cr) => {
