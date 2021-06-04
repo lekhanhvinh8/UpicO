@@ -50,9 +50,37 @@ namespace Upico.Persistence.Service
         }
         
 
-        public Task<IList<Comment>> GetChidrenComments(string parentId, string lastCommentId, int numComments)
+        public async Task<IList<Comment>> GetChildrenComments(string parentId, string lastCommentId, int numComments)
         {
-            throw new NotImplementedException();
+            var rootComment = await this._unitOfWork.Comments.SingleOrDefault(c => c.Id.ToString() == parentId);
+
+            Comment lastComment = null;
+
+            if (lastCommentId != null)
+            {
+                lastComment = await this._unitOfWork.Comments.SingleOrDefault(c => c.Id.ToString() == lastCommentId);
+                await this._unitOfWork.Comments.Load(c => c.ParentId == lastComment.Id);
+            }
+
+            await this._unitOfWork.Comments.Load(c => c.ParentId == rootComment.Id);
+            foreach (var comment in rootComment.Childs)
+            {
+                await this._unitOfWork.Users.Load(u => u.Id == comment.UserId);
+                await this._unitOfWork.Users.LoadMainAvatar(comment.User.UserName);
+
+                await this._unitOfWork.Comments.Load(c => c.ParentId == comment.Id);
+            }
+
+            var comments = rootComment.Childs.ToList();
+
+            comments = comments.OrderByDescending(c => c, new ComparerComment(_unitOfWork)).ToList();
+
+            if (lastComment != null)
+                comments = comments.Where(c => new ComparerComment(_unitOfWork).Compare(c, lastComment) < 0).Take(numComments).ToList();
+            else
+                comments = comments.Take(numComments).ToList();
+
+            return comments;
         }
 
         internal class ComparerComment : IComparer<Comment>
@@ -74,6 +102,12 @@ namespace Upico.Persistence.Service
                     return 1;
 
                 if ((days.Days * (3) + replies) < 0)
+                    return -1;
+
+                if (x.DateCreate > y.DateCreate)
+                    return 1;
+
+                if (x.DateCreate < y.DateCreate)
                     return -1;
 
                 return 0;

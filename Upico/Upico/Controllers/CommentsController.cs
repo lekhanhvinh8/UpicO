@@ -60,6 +60,20 @@ namespace Upico.Controllers
             return Ok(result);
         }
 
+        [HttpGet("childrens")]
+        public async Task<IActionResult> GetChildrens(string parentId, string lastCommentId, int numComments)
+        {
+            var comment = await this._unitOfWork.Comments.SingleOrDefault(c => c.Id.ToString() == parentId);
+            if (comment == null)
+                return BadRequest();
+
+            var comments = await this._commentService.GetChildrenComments(parentId, lastCommentId, numComments);
+
+            var result = this._mapper.Map<IList<Comment>, IList<CommentDetailResource>>(comments);
+
+            return Ok(result);
+        }
+
         [HttpPost("comment")]
         public async Task<IActionResult> Comment([FromBody] CreatedCommentResouce commentResouce)
         {
@@ -141,5 +155,5 @@ namespace Upico.Controllers
             return comments.OrderByDescending(c => c.Childs.Count).ToList();
         }
 
-}
+    }
 }
