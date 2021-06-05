@@ -87,7 +87,7 @@ namespace Upico.Controllers
         [HttpGet("UserProfilePosts")]
         public async Task<IActionResult> getPosts(string sourceUsername, string targetUsername, int numPosts, bool getImages = true)
         {
-            var sourceUser = await this._unitOfWork.Users.GetUser(sourceUsername);
+            var sourceUser = await this._unitOfWork.Users.GetUserWithLikes(sourceUsername);
             var targetUser = await this._unitOfWork.Users.GetUser(targetUsername);
 
             if (sourceUser == null || targetUser == null)
@@ -108,7 +108,7 @@ namespace Upico.Controllers
         [HttpGet("MoreUserProfilePosts")]
         public async Task<IActionResult> getPostsBefore(string sourceUsername, string targetUsername, string latestPostId, int numPosts, bool getImages = true)
         {
-            var sourceUser = await this._unitOfWork.Users.GetUser(sourceUsername);
+            var sourceUser = await this._unitOfWork.Users.GetUserWithLikes(sourceUsername);
             var targetUser = await this._unitOfWork.Users.GetUser(targetUsername);
 
             if (sourceUser == null || targetUser == null)
@@ -169,7 +169,7 @@ namespace Upico.Controllers
         }
 
         [HttpPost("report")]
-        public async Task<IActionResult> Report(ReportedPostResource reportedPostResource)
+        public async Task<IActionResult> Report(ReportResource reportedPostResource)
         {
             var post = await this._unitOfWork.Posts.SingleOrDefault(p => p.Id.ToString() == reportedPostResource.PostId);
             var user = await this._unitOfWork.Users.GetUser(reportedPostResource.ReporterUserName);
@@ -181,14 +181,14 @@ namespace Upico.Controllers
             if (reportedPostInDb != null)
                 return BadRequest("you already have reported this post");
 
-            var reportedPost = this._mapper.Map<ReportedPostResource, ReportedPost>(reportedPostResource);
+            var reportedPost = this._mapper.Map<ReportResource, Report>(reportedPostResource);
             reportedPost.Reporter = user;
 
             await this._unitOfWork.ReportedPosts.Add(reportedPost);
 
             await this._unitOfWork.Complete();
 
-            var result = this._mapper.Map<ReportedPost, ReportedPostResource>(reportedPost);
+            var result = this._mapper.Map<Report, ReportResource>(reportedPost);
 
             return Ok(result);
         }

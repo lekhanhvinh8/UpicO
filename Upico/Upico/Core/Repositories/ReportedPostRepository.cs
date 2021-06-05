@@ -6,7 +6,7 @@ using Upico.Core.Domain;
 
 namespace Upico.Core.Repositories
 {
-    public interface IReportedPostRepository : IRepository<ReportedPost>
+    public interface IReportedPostRepository : IRepository<Report>
     {
     }
 }

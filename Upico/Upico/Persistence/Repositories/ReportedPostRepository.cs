@@ -7,7 +7,7 @@ using Upico.Core.Repositories;
 
 namespace Upico.Persistence.Repositories
 {
-    public class ReportedPostRepository : Repository<ReportedPost>, IReportedPostRepository
+    public class ReportedPostRepository : Repository<Report>, IReportedPostRepository
     {
         private readonly UpicODbContext _context;
 

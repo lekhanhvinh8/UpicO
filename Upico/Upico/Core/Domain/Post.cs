@@ -16,13 +16,13 @@ namespace Upico.Core.Domain
         public IList<PostedImage> PostImages { set; get; }
         public IList<AppUser> Likes { set; get; }
         public IList<Comment> Comments { set; get; }
-        public IList<ReportedPost> ReportedPosts { get; set; }
+        public IList<Report> Reports { get; set; }
         public Post()
         {
             PostImages = new List<PostedImage>();
             Likes = new List<AppUser>();
             Comments = new List<Comment>();
-            ReportedPosts = new List<ReportedPost>();
+            Reports = new List<Report>();
         }
     }
 }

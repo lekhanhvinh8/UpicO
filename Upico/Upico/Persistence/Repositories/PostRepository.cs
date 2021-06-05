@@ -17,7 +17,6 @@ namespace Upico.Persistence.Repositories
         {
             _context = context;
         }
-
         public async Task<Post> GetPostDetail(string postId)
         {
             var post = await this._context.Posts.Include(p => p.Likes)
@@ -29,7 +28,15 @@ namespace Upico.Persistence.Repositories
 
             return post;
         }
+        public async Task<Post> GetReportedPost(string postId)
+        {
+            var post = await this._context.Posts
+                .Include(p => p.PostImages)
+                .Include(p => p.User)
+                .SingleOrDefaultAsync(p => p.Id.ToString() == postId);
 
+            return post;
+        }
         private async Task<IQueryable<Post>> GetRelatedPosts(string userName)
         {
             var user = await this._context.Users
@@ -163,5 +170,7 @@ namespace Upico.Persistence.Repositories
 
             return filterPosts;
         }
+
+        
     }
 }

@@ -33,7 +33,6 @@ namespace Upico.Mapping
                 .ForMember(dp => dp.AvatarUrl, opt => opt.MapFrom(p => p.User.Avatars.FirstOrDefault(a => a.IsMain) != null ? p.User.Avatars.FirstOrDefault(a => a.IsMain).Path : null));
             CreateMap<AppUser, SearchUserResource>()
                 .ForMember(dp => dp.AvatarUrl, opt => opt.MapFrom(p => p.Avatars.FirstOrDefault(a => a.IsMain) != null ? p.Avatars.FirstOrDefault(a => a.IsMain).Path : null));
-
             CreateMap<Comment, CommentDetailResource>()
                 .ForMember(cr => cr.Username, opt => opt.MapFrom(c => c.User.UserName))
                 .ForMember(cr => cr.UserDisplayName, opt => opt.MapFrom(c => c.User.DisplayName))
@@ -44,16 +43,16 @@ namespace Upico.Mapping
                 .AfterMap((c, cr) => {
                     MapChildren(c, cr);
                 });
-            CreateMap<ReportedPost, ReportedPostResource>()
-                .ForMember(rr => rr.ReporterUserName, opt => opt.MapFrom(r => r.Reporter.UserName))
-                .ForMember(rr => rr.PostId, opt => opt.MapFrom(r => r.PostId.ToString()));
+            CreateMap<Report, ReportResource>()
+                .ForMember(rr => rr.ReporterUserName, opt => opt.MapFrom(r => r.Reporter.UserName));
 
             CreateMap<CreatePostResource, Post>();
             CreateMap<UpdateUserProfieResource, AppUser>()
                 .ForMember(u => u.UserName, opt => opt.Ignore())
                 .ForMember(u => u.FullName, opt => opt.MapFrom(ur => ur.FirstName + " " + ur.LastName));
-            CreateMap<ReportedPostResource, ReportedPost>()
-                .ForMember(r => r.PostId, opt => opt.MapFrom(rr => new Guid(rr.PostId)));
+            CreateMap<ReportResource, Report>()
+                .ForMember(r => r.PostId, opt => opt.MapFrom(rr => new Guid(rr.PostId)))
+                .ForMember(r => r.DateCreated, opt => opt.MapFrom(rr => DateTime.Now));
         }
         private void MapChildren(Comment comment, CommentResouce commentResouce)
         {

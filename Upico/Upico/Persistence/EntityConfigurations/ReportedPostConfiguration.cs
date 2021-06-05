@@ -8,18 +8,18 @@ using Upico.Core.Domain;
 
 namespace Upico.Persistence.EntityConfigurations
 {
-    public class ReportedPostConfiguration : IEntityTypeConfiguration<ReportedPost>
+    public class ReportedPostConfiguration : IEntityTypeConfiguration<Report>
     {
-        public void Configure(EntityTypeBuilder<ReportedPost> builder)
+        public void Configure(EntityTypeBuilder<Report> builder)
         {
             builder.HasKey(r => new {r.PostId, r.ReporterId});
 
             builder.HasOne(r => r.Post)
-                .WithMany(p => p.ReportedPosts)
+                .WithMany(p => p.Reports)
                 .HasForeignKey(r => r.PostId);
 
             builder.HasOne(r => r.Reporter)
-                .WithMany(u => u.ReportedPosts)
+                .WithMany(u => u.Reports)
                 .HasForeignKey(r => r.ReporterId);
         }
     }
