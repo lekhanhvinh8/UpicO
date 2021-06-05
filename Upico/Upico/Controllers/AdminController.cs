@@ -54,7 +54,8 @@ namespace Upico.Controllers
 
                 var reportResource = new FirstReportedPostResource()
                 {
-                    PostId = firstReport.PostId,
+                    
+                    Id = firstReport.PostId,
                     NumOfReports = numOfReport,
                     FirstReportTime = firstReport.DateCreated,
                     FirtsReporter = firstReport.Reporter.UserName,
@@ -67,10 +68,10 @@ namespace Upico.Controllers
             return Ok(firstReports.OrderByDescending(f => f.FirstReportTime));
         }
 
-        [HttpGet("detail")]
-        public async Task<IActionResult> GetReportedPostDetail(string postId)
+        [HttpGet("detail/{id}")]
+        public async Task<IActionResult> GetReportedPostDetail(string id)
         {
-            var post = await this._unitOfWork.Posts.GetReportedPost(postId);
+            var post = await this._unitOfWork.Posts.GetReportedPost(id);
 
             if (post == null)
                 return BadRequest();

@@ -171,7 +171,7 @@ namespace Upico.Controllers
         [HttpPost("report")]
         public async Task<IActionResult> Report(ReportResource reportedPostResource)
         {
-            var post = await this._unitOfWork.Posts.SingleOrDefault(p => p.Id.ToString() == reportedPostResource.PostId);
+            var post = await this._unitOfWork.Posts.SingleOrDefault(p => p.Id.ToString() == reportedPostResource.Id);
             var user = await this._unitOfWork.Users.GetUser(reportedPostResource.ReporterUserName);
 
             if (post == null || user == null)

@@ -44,7 +44,8 @@ namespace Upico.Mapping
                     MapChildren(c, cr);
                 });
             CreateMap<Report, ReportResource>()
-                .ForMember(rr => rr.ReporterUserName, opt => opt.MapFrom(r => r.Reporter.UserName));
+                .ForMember(rr => rr.ReporterUserName, opt => opt.MapFrom(r => r.Reporter.UserName))
+                .ForMember(rr => rr.Id, opt => opt.MapFrom(r => r.PostId));
             CreateMap<Post, DetailReportedPostResource>()
                 .ForMember(dr => dr.UserName, opt => opt.MapFrom(p => p.User.UserName));
 
@@ -53,7 +54,7 @@ namespace Upico.Mapping
                 .ForMember(u => u.UserName, opt => opt.Ignore())
                 .ForMember(u => u.FullName, opt => opt.MapFrom(ur => ur.FirstName + " " + ur.LastName));
             CreateMap<ReportResource, Report>()
-                .ForMember(r => r.PostId, opt => opt.MapFrom(rr => new Guid(rr.PostId)))
+                .ForMember(r => r.PostId, opt => opt.MapFrom(rr => new Guid(rr.Id)))
                 .ForMember(r => r.DateCreated, opt => opt.MapFrom(rr => DateTime.Now));
         }
         private void MapChildren(Comment comment, CommentResouce commentResouce)

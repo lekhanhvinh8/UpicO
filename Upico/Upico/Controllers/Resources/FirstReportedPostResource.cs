@@ -7,7 +7,7 @@ namespace Upico.Controllers.Resources
 {
     public class FirstReportedPostResource
     {
-        public Guid PostId { get; set; }
+        public Guid Id { get; set; }
         public int NumOfReports { get; set; }
         public DateTime FirstReportTime { get; set; }
         public string FirtsReporter { get; set; }
