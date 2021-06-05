@@ -31,7 +31,8 @@ namespace Upico.Controllers
             this._photoService = photoService;
         }
 
-        [HttpGet]
+        [HttpGet("reports")]
+
         public async Task<IActionResult> GetReportedPost()
         {
             var reportedPosts = await this._unitOfWork.ReportedPosts.GetAll();
@@ -61,6 +62,8 @@ namespace Upico.Controllers
 
                 firstReports.Add(reportResource);
             }
+
+            Response.Headers.Add("Content-Range", "post 0-20/" + firstReports.Count);
             return Ok(firstReports.OrderByDescending(f => f.FirstReportTime));
         }
 

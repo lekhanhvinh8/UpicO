@@ -99,7 +99,8 @@ namespace Upico.Persistence.Service
                 UserName = user.UserName,
                 Token = finalToken,
                 DisplayName = user.DisplayName,
-                AvatarUrl = path
+                AvatarUrl = path,
+                RoleName = roles.FirstOrDefault()
             };
 
             return loginResponse;

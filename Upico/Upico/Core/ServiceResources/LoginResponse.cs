@@ -11,5 +11,6 @@ namespace Upico.Core.ServiceResources
         public string Token { get; set; }
         public string DisplayName { get; set; }
         public string AvatarUrl { get; set; }
+        public string RoleName { get; set; }
     }
 }

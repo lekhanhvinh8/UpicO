@@ -55,14 +55,32 @@ namespace Upico.Persistence.Repositories
         {
             var posts = await GetRelatedPosts(userName);
 
-            var newPosts = await posts.OrderByDescending(p => p.DateCreate)
-                .Include(p => p.Likes)
-                .Include(p => p.Comments)
-                .Include(p => p.PostImages)
+            await this._context.Users.Where(u => u.Likes
+            .Select(l => l.Id)
+            .Intersect(posts.Select(p => p.Id))
+            .Any()).LoadAsync();
+
+            await this._context.Comments.Where(c => posts.Select(p => p.Id).Contains(c.Post.Id)).LoadAsync();
+
+            await this._context.PostImages.Where(pi => posts.Select(p => p.Id).Contains(pi.PostId)).LoadAsync();
+
+            var newPosts = await posts
+                .OrderByDescending(p => p.DateCreate)
                 .Take(numPosts)
                 .ToListAsync();
 
+            /*
+            var newPosts = await posts
+                .Include(p => p.Likes)
+                .Include(p => p.Comments)
+                .Include(p => p.PostImages)
+                .OrderByDescending(p => p.DateCreate)
+                .Take(numPosts)
+                .ToListAsync();
+            */
+
             return newPosts;
+            
         }
 
         public async Task<IList<Post>> GetRelatedPostsBefore(string userName, string latestPostId, int numPosts)
