@@ -13,6 +13,7 @@ namespace Upico.Core
         IPostRepository Posts { get; }
         IPostedImageRepository PostedImages { get; }
         ICommentRepository Comments { get; }
+        IReportedPostRepository ReportedPosts { get; }
         Task<int> Complete();
     }
 }

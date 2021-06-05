@@ -18,11 +18,10 @@ namespace Upico.Controllers.Resources
         public bool IsLiked { get; set; }
         public IList<PhotoResource> PostImages { set; get; }
         public int Likes { set; get; }
-        public IList<string> Comments { set; get; }
+        public int Comments { set; get; }
         public DetailedPostResource()
         {
             PostImages = new List<PhotoResource>();
-            Comments = new List<string>();
         }
     }
 }

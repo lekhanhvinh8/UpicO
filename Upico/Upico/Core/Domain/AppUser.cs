@@ -17,6 +17,7 @@ namespace Upico.Core.Domain
         public IList<Post> Likes { get; set; }
         public IList<AppUser> Followers { get; set; }
         public IList<AppUser> Followings { get; set; }
+        public IList<ReportedPost> ReportedPosts { get; set; }
         public AppUser()
         {
             Posts = new List<Post>();
@@ -25,6 +26,7 @@ namespace Upico.Core.Domain
             Likes = new List<Post>();
             Followers = new List<AppUser>();
             Followings = new List<AppUser>();
+            ReportedPosts = new List<ReportedPost>();
         }
     }
 }

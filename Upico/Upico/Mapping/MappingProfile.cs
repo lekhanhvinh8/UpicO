@@ -25,7 +25,7 @@ namespace Upico.Mapping
                 .ForMember(dp => dp.Likes, opt => opt.MapFrom(p => p.Likes.Count))
                 .ForMember(dp => dp.Comments, opt => opt.MapFrom(p => p.Comments.Count));
             CreateMap<Post, DetailedPostResource>()
-                .ForMember(dp => dp.Comments, opt => opt.MapFrom(p => p.Comments.Select(pf => pf.Content)))
+                .ForMember(dp => dp.Comments, opt => opt.MapFrom(p => p.Comments.Count))
                 .ForMember(dp => dp.Likes, opt => opt.MapFrom(p => p.Likes.Count()))
                 .ForMember(dp => dp.DisplayName, opt => opt.MapFrom(p => p.User.DisplayName))
                 .ForMember(dp => dp.Username, opt => opt.MapFrom(p => p.User.UserName))

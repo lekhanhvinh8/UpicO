@@ -83,6 +83,7 @@ namespace Upico
             services.AddScoped<IPostRepository, PostRepository>();
             services.AddScoped<IPostedImageRepository, PostedImageRepository>();
             services.AddScoped<ICommentRepository, CommentRepository>();
+            services.AddScoped<IReportedPostRepository, ReportedPostRepository>();
 
             //For auto mapper
             services.AddAutoMapper(typeof(Startup));

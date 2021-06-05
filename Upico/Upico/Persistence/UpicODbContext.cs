@@ -13,6 +13,7 @@ namespace Upico.Persistence
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<PostedImage> PostImages { get; set; }
+        public DbSet<ReportedPost> ReportedPosts { get; set; }
         public UpicODbContext(DbContextOptions<UpicODbContext> options)
             :base(options)
         {
@@ -28,6 +29,7 @@ namespace Upico.Persistence
             builder.ApplyConfiguration(new PostConfigurations());
             builder.ApplyConfiguration(new PostImageConfigurations());
             builder.ApplyConfiguration(new AppUserConfiguration());
+            builder.ApplyConfiguration(new ReportedPostConfiguration());
         }
     }
 }

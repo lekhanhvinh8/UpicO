@@ -48,7 +48,7 @@ namespace Upico.Persistence.Repositories
 
             var newPosts = await posts.OrderByDescending(p => p.DateCreate)
                 .Include(p => p.Likes)
-                .Include(p => p.Comments.Where(c => c.Parent == null).Take(3))
+                .Include(p => p.Comments)
                 .Include(p => p.PostImages)
                 .Take(numPosts)
                 .ToListAsync();
@@ -65,7 +65,7 @@ namespace Upico.Persistence.Repositories
             var newPosts = await posts.Where(p => p.DateCreate < latestPost.DateCreate)
                 .OrderByDescending(p => p.DateCreate)
                 .Include(p => p.Likes)
-                .Include(p => p.Comments.Where(c => c.Parent == null).Take(3))
+                .Include(p => p.Comments)
                 .Include(p => p.PostImages)
                 .Take(numPosts)
                 .ToListAsync();
