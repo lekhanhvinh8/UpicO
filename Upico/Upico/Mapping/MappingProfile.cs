@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using System;
 using System.Linq;
 using Upico.Controllers.Resouces;
 using Upico.Controllers.Resources;
@@ -43,11 +44,16 @@ namespace Upico.Mapping
                 .AfterMap((c, cr) => {
                     MapChildren(c, cr);
                 });
+            CreateMap<ReportedPost, ReportedPostResource>()
+                .ForMember(rr => rr.ReporterUserName, opt => opt.MapFrom(r => r.Reporter.UserName))
+                .ForMember(rr => rr.PostId, opt => opt.MapFrom(r => r.PostId.ToString()));
 
             CreateMap<CreatePostResource, Post>();
             CreateMap<UpdateUserProfieResource, AppUser>()
                 .ForMember(u => u.UserName, opt => opt.Ignore())
                 .ForMember(u => u.FullName, opt => opt.MapFrom(ur => ur.FirstName + " " + ur.LastName));
+            CreateMap<ReportedPostResource, ReportedPost>()
+                .ForMember(r => r.PostId, opt => opt.MapFrom(rr => new Guid(rr.PostId)));
         }
         private void MapChildren(Comment comment, CommentResouce commentResouce)
         {

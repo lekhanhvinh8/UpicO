@@ -76,9 +76,9 @@ namespace Upico.Persistence.Service
             comments = comments.OrderBy(c => c.DateCreate).ToList();
 
             if (lastComment != null)
-                comments = comments.Where(c => c.DateCreate.CompareTo(lastComment.DateCreate) > 0).Take(numComments).ToList();
+                comments = comments.Where(c => c.DateCreate.CompareTo(lastComment.DateCreate) < 0).TakeLast(numComments).ToList();
             else
-                comments = comments.Take(numComments).ToList();
+                comments = comments.TakeLast(numComments).ToList();
 
             return comments;
         }

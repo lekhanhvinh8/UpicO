@@ -168,6 +168,31 @@ namespace Upico.Controllers
             return Ok(result);
         }
 
+        [HttpPost("report")]
+        public async Task<IActionResult> Report(ReportedPostResource reportedPostResource)
+        {
+            var post = await this._unitOfWork.Posts.SingleOrDefault(p => p.Id.ToString() == reportedPostResource.PostId);
+            var user = await this._unitOfWork.Users.GetUser(reportedPostResource.ReporterUserName);
+
+            if (post == null || user == null)
+                return NotFound();
+
+            var reportedPostInDb = await this._unitOfWork.ReportedPosts.SingleOrDefault(r => r.PostId == post.Id && r.ReporterId == user.Id);
+            if (reportedPostInDb != null)
+                return BadRequest("you already have reported this post");
+
+            var reportedPost = this._mapper.Map<ReportedPostResource, ReportedPost>(reportedPostResource);
+            reportedPost.Reporter = user;
+
+            await this._unitOfWork.ReportedPosts.Add(reportedPost);
+
+            await this._unitOfWork.Complete();
+
+            var result = this._mapper.Map<ReportedPost, ReportedPostResource>(reportedPost);
+
+            return Ok(result);
+        }
+
         [HttpPut]
         public async Task<IActionResult> UpdatePrivateMode(string postId, bool privateMode)
         {
