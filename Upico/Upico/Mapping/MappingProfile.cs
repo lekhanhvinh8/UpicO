@@ -45,6 +45,8 @@ namespace Upico.Mapping
                 });
             CreateMap<Report, ReportResource>()
                 .ForMember(rr => rr.ReporterUserName, opt => opt.MapFrom(r => r.Reporter.UserName));
+            CreateMap<Post, DetailReportedPostResource>()
+                .ForMember(dr => dr.UserName, opt => opt.MapFrom(p => p.User.UserName));
 
             CreateMap<CreatePostResource, Post>();
             CreateMap<UpdateUserProfieResource, AppUser>()

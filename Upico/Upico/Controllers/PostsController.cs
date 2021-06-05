@@ -223,6 +223,7 @@ namespace Upico.Controllers
                 this._unitOfWork.Comments.Remove(comment);
             }
 
+            post.Reports.Clear();
             post.Likes.Clear();
 
             this._unitOfWork.Posts.Remove(post);

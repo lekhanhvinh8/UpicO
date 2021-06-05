@@ -48,6 +48,20 @@ namespace Upico.Persistence.Repositories
             RemoveAllChildren(comment);
         }
 
+        public void RemoveAllComments(string postId)
+        {
+            var post = this._context.Posts
+                .Include(p => p.Comments)
+                .SingleOrDefault(p => p.Id.ToString() == postId);
+
+            foreach (var comment in post.Comments)
+            {
+                RemoveAllChildren(comment.Id.ToString());
+            }
+
+            this._context.Comments.RemoveRange(post.Comments);
+        }
+
         private void RemoveAllChildren(Comment comment)
         {
             foreach (var child in comment.Childs)

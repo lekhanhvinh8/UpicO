@@ -21,12 +21,14 @@ namespace Upico.Controllers
         private readonly IUserService _userService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IPhotoService _photoService;
 
-        public AdminController(IUserService userService, IUnitOfWork unitOfWork, IMapper mapper)
+        public AdminController(IUserService userService, IUnitOfWork unitOfWork, IMapper mapper, IPhotoService photoService)
         {
             this._userService = userService;
             this._unitOfWork = unitOfWork;
             this._mapper = mapper;
+            this._photoService = photoService;
         }
 
         [HttpGet]
@@ -59,7 +61,7 @@ namespace Upico.Controllers
 
                 firstReports.Add(reportResource);
             }
-            return Ok(firstReports);
+            return Ok(firstReports.OrderByDescending(f => f.FirstReportTime));
         }
 
         [HttpGet("detail")]
@@ -70,11 +72,52 @@ namespace Upico.Controllers
             if (post == null)
                 return BadRequest();
 
-            var reports = this._unitOfWork.ReportedPosts.Find(r => r.PostId.ToString() == postId);
-            if (reports.Count() == 0)
+            var result = this._mapper.Map<Post, DetailReportedPostResource>(post);
+
+            return Ok(result);
+        }
+
+        [HttpDelete("pass")]
+        public async Task<IActionResult> PassAllReport(string postId)
+        {
+            var post = await this._unitOfWork.Posts.GetReportedPost(postId);
+            if (post == null)
                 return BadRequest();
 
+            post.Reports.Clear();
+            await this._unitOfWork.Complete();
 
+            return Ok();
+        }
+
+        [HttpDelete("delete")]
+        public async Task<IActionResult> DeletePost(string postId)
+        {
+            var post = await this._unitOfWork.Posts.GetReportedPost(postId);
+            if (post == null)
+                return BadRequest();
+
+            //Load all images and delete it first of post
+            await this._unitOfWork.PostedImages.Load(p => p.PostId == post.Id);
+
+            var postedImages = post.PostImages;
+            var postedImageIds = postedImages.Select(p => p.Id).ToList();
+
+            await this._photoService.DeletePhotos(postedImageIds);
+
+            post.PostImages.Clear();
+            this._unitOfWork.PostedImages.RemoveRange(postedImages);
+
+            //Delete all related infomation
+            post.Reports.Clear();
+            post.Likes.Clear();
+
+            this._unitOfWork.Comments.RemoveAllComments(postId);
+
+            //Finally delete the post
+            this._unitOfWork.Posts.Remove(post);
+
+            await this._unitOfWork.Complete();
 
             return Ok();
         }

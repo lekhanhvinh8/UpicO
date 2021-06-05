@@ -31,9 +31,11 @@ namespace Upico.Persistence.Repositories
         public async Task<Post> GetReportedPost(string postId)
         {
             var post = await this._context.Posts
+                .Include(p => p.Reports)
+                    .ThenInclude(r => r.Reporter)
                 .Include(p => p.PostImages)
                 .Include(p => p.User)
-                .SingleOrDefaultAsync(p => p.Id.ToString() == postId);
+                .SingleOrDefaultAsync(p => p.Id.ToString() == postId && p.Reports.Count > 0);
 
             return post;
         }

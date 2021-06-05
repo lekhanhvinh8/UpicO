@@ -6,5 +6,6 @@ namespace Upico.Core.Repositories
     {
         public void LoadAllChildren(Comment comment);
         public void RemoveAllChildren(string commentId);
+        public void RemoveAllComments(string postId);
     }
 }
