@@ -1,0 +1,269 @@
+[33mcommit 27d95fc8521d677a604e01448ed90fbdba0c598e[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Vinh Le <dotkichvz58@gmail.com>
+Date:   Sat Jun 5 23:07:33 2021 +0700
+
+    last commit
+
+[33mcommit 5adaed0473e4068e3011dbd0e3b2788eb1400c0e[m
+Author: Vinh Le <dotkichvz58@gmail.com>
+Date:   Sat Jun 5 21:56:02 2021 +0700
+
+    hot fix login add role name
+
+[33mcommit 863b906bbae74f9b5716104d713238df0e6d3221[m
+Author: Vinh Le <dotkichvz58@gmail.com>
+Date:   Sat Jun 5 19:09:19 2021 +0700
+
+    implement delete reported post from admin
+
+[33mcommit c765f14b2345ca201696c21356d8b18701738615[m
+Author: Vinh Le <dotkichvz58@gmail.com>
+Date:   Sat Jun 5 18:10:07 2021 +0700
+
+    Implement Get All Reported Post
+
+[33mcommit fb6b2abc62a2de20f708e5c0a6cacff61c6d9800[m
+Author: Vinh Le <dotkichvz58@gmail.com>
+Date:   Sat Jun 5 11:52:46 2021 +0700
+
+    hot fix get comment
+
+[33mcommit f8dca71aadd989c8806d48f1c175ccb55936c473[m
+Author: Vinh Le <dotkichvz58@gmail.com>
+Date:   Sat Jun 5 10:47:11 2021 +0700
+
+    hot fix get childrens comment
+
+[33mcommit c36a825aaf11c1eb23294500baa69d96ea4bbbc7[m
+Author: Vinh Le <dotkichvz58@gmail.com>
+Date:   Fri Jun 4 20:24:21 2021 +0700
+
+    Implement get post with only content
+
+[33mcommit aee57c87252fd58a694cdf4ef4ae495b275e60d9[m
+Author: Vinh Le <dotkichvz58@gmail.com>
+Date:   Fri Jun 4 18:35:27 2021 +0700
+
+    implement get comment feature
+
+[33mcommit 7efd222cec46a4da15c9117e370af14e98a9f95b[m
+Author: Vinh Le <dotkichvz58@gmail.com>
+Date:   Fri Jun 4 17:53:15 2021 +0700
+
+    hot fix check following
+
+[33mcommit f4722f22244809e24ddafe5dac84d14d34a95ee1[m
+Author: Vinh Le <dotkichvz58@gmail.com>
+Date:   Fri Jun 4 13:26:49 2021 +0700
+
+    hot fix receiving token
+
+[33mcommit 88f3bca33f8c443f2a6a234707eda47e06ef2994[m
+Author: Vinh Le <dotkichvz58@gmail.com>
+Date:   Fri Jun 4 12:04:15 2021 +0700
+
+    hot fix get avatar url
+
+[33mcommit 314938bbac072439702fdacac5d5c8bc391adb7c[m
+Author: Vinh Le <dotkichvz58@gmail.com>
+Date:   Fri Jun 4 09:30:42 2021 +0700
+
+    Implement get suggestion followings feature
+
+[33mcommit 3216ce2bc271555469c95a24a5e346a23607ae66[m
+Author: Vinh Le <dotkichvz58@gmail.com>
+Date:   Thu Jun 3 19:12:53 2021 +0700
+
+    fix authentication
+
+[33mcommit ac653d0427cd1450b56a6bcf75d9c515106fdd93[m
+Author: Vinh Le <dotkichvz58@gmail.com>
+Date:   Thu Jun 3 16:56:53 2021 +0700
+
+    hot fix get user profile posts
+
+[33mcommit 04f020a09cccb2ba89dddfdf3f3a710d7aa851da[m
+Author: Vinh Le <dotkichvz58@gmail.com>
+Date:   Thu Jun 3 08:29:17 2021 +0700
+
+    implement delete post feature
+
+[33mcommit 5ee06ca0b14cf479c058c7f2afd3438c3bc4f0ba[m
+Author: Vinh Le <dotkichvz58@gmail.com>
+Date:   Wed Jun 2 17:32:10 2021 +0700
+
+    hot fix get user profile
+
+[33mcommit ebf7a10304b9c7699c46a06050344bc01dc876ed[m
+Author: Vinh Le <dotkichvz58@gmail.com>
+Date:   Wed Jun 2 16:34:36 2021 +0700
+
+    hot fix change password
+
+[33mcommit 426edac26818fdd8dabe5952c36e2e6f9ac1253c[m
+Author: Vinh Le <dotkichvz58@gmail.com>
+Date:   Wed Jun 2 15:09:09 2021 +0700
+
+    implement update user profile feature
+
+[33mcommit f6ab1336193fb40c6feb533e6f22fb8ff5d2fa0b[m
+Author: Vinh Le <dotkichvz58@gmail.com>
+Date:   Tue Jun 1 17:26:23 2021 +0700
+
+    Add IsLiked to get posts API
+
+[33mcommit acd0a100fa5ec481dfdc62a607bf2b9f85b57aa3[m
+Author: Vinh Le <dotkichvz58@gmail.com>
+Date:   Tue Jun 1 11:24:46 2021 +0700
+
+    hot fix get user profile posts
+
+[33mcommit 235def49bd697420d78d837beddff174bbb6f931[m
+Author: Vinh Le <dotkichvz58@gmail.com>
+Date:   Tue Jun 1 10:28:28 2021 +0700
+
+    Fix Getting User Profile Posts
+
+[33mcommit ed949ec0c8a71af9765f85276d0e54c2b774603a[m
+Author: Vinh Le <dotkichvz58@gmail.com>
+Date:   Mon May 31 22:35:59 2021 +0700
+
+    Implement get posts in user profile
+
+[33mcommit e4497ce91206e1a00b75ad33a3d8f32fe12bd4a7[m
+Author: Vinh Le <dotkichvz58@gmail.com>
+Date:   Mon May 31 21:06:16 2021 +0700
+
+    Get User Profile
+
+[33mcommit f8eb971729588c262d5a5c869ac2639c010035ed[m
+Author: Vinh Le <dotkichvz58@gmail.com>
+Date:   Mon May 31 18:25:59 2021 +0700
+
+    Hot fix search
+
+[33mcommit c26dfda13739fe21caa483c9e3b817e0f00c1349[m
+Author: Vinh Le <dotkichvz58@gmail.com>
+Date:   Mon May 31 17:52:17 2021 +0700
+
+    Implement Search Feature
+
+[33mcommit ba47d579626dc84fc2be64b57dee1d349b8baca2[m
+Author: Vinh Le <dotkichvz58@gmail.com>
+Date:   Sun May 23 06:26:22 2021 +0700
+
+    hot fix create comment
+
+[33mcommit 7302d9c45242ca3efc4455577712775ecbfd84cf[m
+Author: Vinh Le <dotkichvz58@gmail.com>
+Date:   Sun May 23 00:46:01 2021 +0700
+
+    implement comment feature
+
+[33mcommit 27a044ed5f230e6cb0207c9f40bb1f39a5735265[m
+Author: Vinh Le <dotkichvz58@gmail.com>
+Date:   Sat May 22 21:37:00 2021 +0700
+
+    fix register error message
+
+[33mcommit 1ad7aae0a3e1b19648480deef9e89db3551b9fd4[m
+Author: Vinh Le <dotkichvz58@gmail.com>
+Date:   Sat May 22 18:05:27 2021 +0700
+
+    implement like feature
+
+[33mcommit e3319610f374ab4085f942e0e9c8695a303415f8[m
+Author: Vinh Le <dotkichvz58@gmail.com>
+Date:   Sat May 22 17:27:29 2021 +0700
+
+    register validation
+
+[33mcommit 3f471228ff405e5cf58f8d1bf5db8513e9e024fd[m
+Author: Vinh Le <dotkichvz58@gmail.com>
+Date:   Sat May 22 10:11:05 2021 +0700
+
+    update detailed post resouce
+
+[33mcommit 06f213cccece0ec228a06589a13a0f856995a439[m
+Author: Vinh Le <dotkichvz58@gmail.com>
+Date:   Fri May 21 21:05:57 2021 +0700
+
+    implement post feature 4
+
+[33mcommit 8f0bdb179c141ee0107912870de7b1638b3ef7be[m
+Author: Vinh Le <dotkichvz58@gmail.com>
+Date:   Fri May 21 13:33:06 2021 +0700
+
+    implement post feature 3
+
+[33mcommit 987cb5432a8490813d35d812699b3c2736ae3b6a[m
+Author: Vinh Le <dotkichvz58@gmail.com>
+Date:   Fri May 21 11:40:25 2021 +0700
+
+    implement post feature 2
+
+[33mcommit 38936e4e8274147b7cc4ea93f5f27cd4760fc33d[m
+Author: Vinh Le <dotkichvz58@gmail.com>
+Date:   Thu May 20 14:38:24 2021 +0700
+
+    Implement post feature
+
+[33mcommit b336de807a2615886e9faac5ea5f7c6415e9a626[m
+Author: Vinh Le <dotkichvz58@gmail.com>
+Date:   Mon May 17 17:57:36 2021 +0700
+
+    Implement avatar feature
+
+[33mcommit 3fad26430da9514f8e63507b2422d12e3d8c5399[m
+Author: Vinh Le <dotkichvz58@gmail.com>
+Date:   Sat May 15 15:07:45 2021 +0700
+
+    refactoring code
+
+[33mcommit e69252e7ea8751e47ae96d845ea1e2e8871694cd[m
+Merge: 8189831 3944d04
+Author: Hữu Tâm <64393473+LuongHuuTam@users.noreply.github.com>
+Date:   Thu May 13 14:04:11 2021 +0700
+
+    Merge pull request #2 from lekhanhvinh8/dev.login-register
+    
+    login-register
+
+[33mcommit 3944d0447d97abb202f6f95846d7a2db26689108[m[33m ([m[1;31morigin/dev.login-register[m[33m)[m
+Author: Tam <luongtam962@gmail.com>
+Date:   Thu May 13 13:59:50 2021 +0700
+
+    login-register
+
+[33mcommit 81898314776098119647c9d704916f3a582d4d8d[m
+Author: Vinh Le <dotkichvz58@gmail.com>
+Date:   Fri May 7 21:13:24 2021 +0700
+
+    implement repository pattern
+
+[33mcommit ff703517ac97d39c41881530e8397b35058ac93d[m
+Merge: 1e39555 354cadf
+Author: elviswinston <64413303+elviswinston@users.noreply.github.com>
+Date:   Fri May 7 19:35:56 2021 +0700
+
+    Merge pull request #1 from lekhanhvinh8/dev.db
+    
+    create-database
+
+[33mcommit 354cadf1cbe0c9e94739c155423f14289e389e7f[m
+Author: Tam <luongtam962@gmail.com>
+Date:   Fri May 7 19:16:44 2021 +0700
+
+    create-database
+
+[33mcommit 1e39555bf37f9a354ac9c7f5d08c443a1778d1dc[m
+Author: Vinh Le <dotkichvz58@gmail.com>
+Date:   Thu May 6 16:04:03 2021 +0700
+
+    Makeing repos asynchronus and adding automapper
+
+[33mcommit 564e5631be640f042939356550b8bedf14f63ce7[m
+Author: Vinh Le <dotkichvz58@gmail.com>
+Date:   Wed May 5 22:56:03 2021 +0700
+
+    first commit

@@ -282,5 +282,32 @@ namespace Upico.Controllers
 
             return Problem();
         }
+
+        [HttpGet("sendEmailConfirmation")]
+        [AllowAnonymous]
+        public async Task<IActionResult> SendEmailConfirmation(string username)
+        {
+            var callbackurl = "http://localhost:5000/api/users/confirmEmail";
+
+            await this._userService.SendConfirmEmailRequest(username, callbackurl);
+
+            return Ok();
+        }
+
+        [HttpGet("confirmEmail")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ConfirmEmail(string username, string token)
+        {
+            var user = await this._unitOfWork.Users.GetUser(username);
+            if (user == null)
+                return BadRequest();
+
+            var result = await this._userService.ConfirmEmail(username, token);
+
+            if (result)
+                return Ok();
+
+            return Problem();
+        }
     }
 }

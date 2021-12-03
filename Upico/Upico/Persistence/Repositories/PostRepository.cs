@@ -55,10 +55,14 @@ namespace Upico.Persistence.Repositories
         {
             var posts = await GetRelatedPosts(userName);
 
+            posts = posts.Include(p => p.Likes);
+
+            /*
             await this._context.Users.Where(u => u.Likes
             .Select(l => l.Id)
             .Intersect(posts.Select(p => p.Id))
             .Any()).LoadAsync();
+            */
 
             await this._context.Comments.Where(c => posts.Select(p => p.Id).Contains(c.Post.Id)).LoadAsync();
 

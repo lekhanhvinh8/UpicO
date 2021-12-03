@@ -11,7 +11,7 @@ namespace Upico.Core.Repositories
         Task<TEntity> Get(int id);
         Task<TEntity> SingleOrDefault(Expression<Func<TEntity, bool>> predicate);
         Task<IEnumerable<TEntity>> GetAll();
-        IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate);
+        Task<IEnumerable<TEntity>> Find(Expression<Func<TEntity, bool>> predicate);
         Task Add(TEntity entity);
         Task AddRange(IEnumerable<TEntity> entities);
         void Remove(TEntity entity);

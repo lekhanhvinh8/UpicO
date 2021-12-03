@@ -17,7 +17,6 @@ namespace Upico.Persistence
         public UpicODbContext(DbContextOptions<UpicODbContext> options)
             :base(options)
         {
-
         }
 
         protected override void OnModelCreating(ModelBuilder builder)

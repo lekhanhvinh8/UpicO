@@ -233,6 +233,46 @@ namespace Upico.Persistence.Service
             return follower.Followings.Contains(following);
         }
 
+        public async Task SendConfirmEmailRequest(string username, string callbackUrl)
+        {
+            var user = await this._userManager.FindByNameAsync(username);
+            var token = await this._userManager.GenerateEmailConfirmationTokenAsync(user);
+
+            callbackUrl += String.Format("?username={0}&token={1}", user.UserName, HttpUtility.UrlEncode(token));
+
+            var htmlContent = String.Format(
+                    @"To Register. Please confirm the email by clicking this link: 
+        <br><a href='{0}'>Confirm new email</a>",
+                    callbackUrl);
+
+            // send email to the user with the confirmation link
+            MailRequest mailRequest = new MailRequest()
+            {
+                ToEmail = user.Email,
+                Subject = "Hello From Upico",
+                Body = htmlContent
+            };
+
+            try
+            {
+                await this._mailService.SendEmailAsync(mailRequest);
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+        }
+
+        public async Task<bool> ConfirmEmail(string username, string token)
+        {
+            var user = await this._userManager.FindByNameAsync(username);
+
+            var result = await _userManager.ConfirmEmailAsync(user, token);
+
+            return result.Succeeded;
+        }
+
         public async Task SendChangeEmailRequest(string username, string newEmail, string callbackurl)
         {
             var user = await this._userManager.FindByNameAsync(username);
@@ -271,6 +311,7 @@ namespace Upico.Persistence.Service
             var user = await this._userManager.FindByNameAsync(username);
 
             var result = await _userManager.ChangeEmailAsync(user, newEmail, token);
+
 
             return result.Succeeded;
         }

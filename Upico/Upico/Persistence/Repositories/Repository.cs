@@ -27,9 +27,9 @@ namespace Upico.Persistence.Repositories
             await this._entities.AddRangeAsync(entities);
         }
 
-        public IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate)
+        public async Task<IEnumerable<TEntity>> Find(Expression<Func<TEntity, bool>> predicate)
         {
-            return this._entities.Where(predicate);
+            return await this._entities.Where(predicate).ToListAsync();
         }
 
         public async Task<TEntity> Get(int id)

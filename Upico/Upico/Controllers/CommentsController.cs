@@ -27,6 +27,15 @@ namespace Upico.Controllers
             this._mapper = mapper;
         }
 
+        [HttpGet("test")]
+        public async Task<IActionResult> Test(string postId)
+        {
+            var comments = await this._unitOfWork.Comments.GetAll();
+
+            
+            return Ok(comments);
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetAll(string postId)
         {

@@ -68,7 +68,7 @@ namespace Upico.Controllers
             return Ok(firstReports.OrderByDescending(f => f.FirstReportTime));
         }
 
-        [HttpGet("detail/{id}")]
+        [HttpGet("reports/{id}")]
         public async Task<IActionResult> GetReportedPostDetail(string id)
         {
             var post = await this._unitOfWork.Posts.GetReportedPost(id);
